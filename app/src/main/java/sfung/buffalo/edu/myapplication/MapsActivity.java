@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -59,8 +60,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Geocoder geocoder = new Geocoder(getApplicationContext());
                     try {
                         List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
-                        String str = addressList.get(0).getAdminArea();
-                        str += addressList.get(0).getCountryName();
+                        String str = addressList.get(0).getAddressLine(0);
+                       
+                        EditText editText = (EditText) findViewById(R.id.From);
+                        String value = str;
+                        editText.setText(value);
                         mMap.addMarker(new MarkerOptions().position(latlng).title(str));
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,15.2f));
                     } catch (IOException e) {
@@ -93,8 +97,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Geocoder geocoder = new Geocoder(getApplicationContext());
                     try {
                         List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
-                        String str = addressList.get(0).getAdminArea();
-                        str += addressList.get(0).getCountryName();
+
+                        String str= addressList.get(0).getAddressLine(0);
+                        EditText editText = (EditText) findViewById(R.id.From);
+                        String value = str;
+                        editText.setText(value);
                         mMap.addMarker(new MarkerOptions().position(latlng).title(str));
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,10.2f));
                     } catch (IOException e) {
