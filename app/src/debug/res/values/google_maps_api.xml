@@ -20,7 +20,7 @@
     Once you have your key (it starts with "AIza"), replace the "google_maps_key"
     string in this file.
     -->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDLAlRPtZ7X4R5BGTpIDeop9OweECs2RyM</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBADbFgO69G1FLzYoKn9-8l60pITxEpOfs</string>
 </resources>
 
 
@@ -28,4 +28,6 @@
     <!-- jay's key: AIzaSyCHd3KSUpo7M5Ned_oIGiQdsaka4rIXgrA-->
     <!--isaac's 2nd key: AIzaSyBk9JE9FjVqkVLaIwFSh5ymXfzMD3m2hX4-->
     <!--muh's note 5 key: AIzaSyBD0DsPNbvtI9TZA3UJ6y2QY9k3yz_hkww-->
+
+<!--step's new key: AIzaSyBADbFgO69G1FLzYoKn9-8l60pITxEpOfs-->
 

@@ -1,7 +1,6 @@
 package sfung.buffalo.edu.myapplication;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -9,44 +8,31 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.widget.AutoCompleteTextView;
+import android.util.Log;
 import android.widget.EditText;
-import android.widget.TextView;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.PlaceDetectionClient;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-
 
 import java.io.IOException;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, GoogleApiClient.OnConnectionFailedListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private GoogleMap mMap;
-    private TextView From;
     LocationManager locationManager;
-    private GoogleApiClient mGoogleApiClient;
-    private GeoDataClient mGeoDataClient;
-    private PlaceDetectionClient mPlaceDetectionClient;
-    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    PlaceAutocompleteFragment placeAutoComplete;
+    private Marker marker;
 
 
     @Override
@@ -54,12 +40,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete);
+        placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                Log.d("Maps", "Place selected: " + place.getName());
+            }
 
+            @Override
+            public void onError(Status status) {
+                Log.d("Maps", "An error occurred: " + status);
+            }
+        });
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -85,8 +82,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         EditText editText = (EditText) findViewById(R.id.From);
                         String value = str;
                         editText.setText(value);
-                        mMap.addMarker(new MarkerOptions().position(latlng).title(str));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,15.2f));
+                        if(marker == null) {
+                            marker = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.2f));
+                        }
+                        else{
+                            marker.remove();
+                            marker = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -122,8 +125,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         EditText editText = (EditText) findViewById(R.id.From);
                         String value = str;
                         editText.setText(value);
-                        mMap.addMarker(new MarkerOptions().position(latlng).title(str));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,10.2f));
+                        if(marker == null) {
+                            marker = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.2f));
+                        }
+                        else{
+                            marker.remove();
+                            marker = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -163,10 +172,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady (GoogleMap googleMap){
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-//            LatLng sydney = new LatLng(-34, 151);
-//            mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
     }
     @Override
@@ -180,8 +185,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 }
