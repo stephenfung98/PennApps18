@@ -40,7 +40,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete);
+        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
         placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -52,6 +52,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.d("Maps", "An error occurred: " + status);
             }
         });
+
+        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
+        placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                Log.d("Maps", "Place selected: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.d("Maps", "An error occurred: " + status);
+            }
+        });
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -78,10 +92,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     try {
                         List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
                         String str = addressList.get(0).getAddressLine(0);
-                       
-                        EditText editText = (EditText) findViewById(R.id.From);
+
+                        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
                         String value = str;
-                        editText.setText(value);
+                        placeAutoComplete.setText(value);
                         if(marker == null) {
                             marker = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.2f));
@@ -122,9 +136,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
 
                         String str= addressList.get(0).getAddressLine(0);
-                        EditText editText = (EditText) findViewById(R.id.From);
+                        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
                         String value = str;
-                        editText.setText(value);
+                        placeAutoComplete.setText(value);
                         if(marker == null) {
                             marker = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.2f));

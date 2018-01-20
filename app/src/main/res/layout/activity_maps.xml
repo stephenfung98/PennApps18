@@ -3,18 +3,20 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-    <EditText
-        android:id="@+id/From"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="From"
-        android:inputType="text" />
-
     <fragment
-        android:id="@+id/place_autocomplete"
+        android:id="@+id/to_autocomplete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        android:hint="Enter your destination"
+        />
+
+    <fragment
+        android:id="@+id/from_autocomplete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        android:hint="Enter your destination"
         />
 
 
