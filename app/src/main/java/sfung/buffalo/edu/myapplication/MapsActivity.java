@@ -41,6 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
+        ((EditText)placeAutoComplete.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
         placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -69,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        ((EditText)placeAutoComplete.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
         mapFragment.getMapAsync(this);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
