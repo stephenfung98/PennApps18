@@ -59,7 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Geocoder geocoder = new Geocoder(getApplicationContext());
                     try {
                         List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
-                        String str = addressList.get(0).getCountryCode();
+                        String str = addressList.get(0).getAdminArea();
                         str += addressList.get(0).getCountryName();
                         mMap.addMarker(new MarkerOptions().position(latlng).title(str));
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,15.2f));
