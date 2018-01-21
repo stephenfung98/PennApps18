@@ -16,11 +16,13 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -32,7 +34,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     LocationManager locationManager;
     PlaceAutocompleteFragment placeAutoComplete;
-    private Marker marker;
+    PlaceAutocompleteFragment placeAutoCompleteTo;
+    private Marker markerTo;
+    private Marker markerFrom;
+    LatLng latlngTo;
+    LatLng latlngFrom;
+    boolean bootLocation = false;
 
 
     @Override
@@ -59,7 +66,58 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                Log.d("Maps", "Place selected: " + place.getName());
+                if(markerFrom == null) {
+                    markerFrom = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getAddress().toString()));
+                    latlngFrom = place.getLatLng();
+                }
+                else{
+                    markerFrom.remove();
+                    markerFrom = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getAddress().toString()));
+                    latlngFrom = place.getLatLng();
+                }
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        // Add your locations to bounds using builder.include, maybe in a loop
+                builder.include(place.getLatLng());
+                builder.include(latlngTo);
+                LatLngBounds bounds = builder.build();
+
+        //Then construct a cameraUpdate
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 300);
+        //Then move the camera
+                mMap.animateCamera(cameraUpdate);
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.d("Maps", "An error occurred: " + status);
+            }
+        });
+
+        placeAutoCompleteTo = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
+        placeAutoCompleteTo.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                if(markerTo == null) {
+                    markerTo = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getAddress().toString()));
+                    latlngTo = place.getLatLng();
+                }
+                else{
+                    markerTo.remove();
+                    markerTo = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getAddress().toString()));
+                    latlngTo = place.getLatLng();
+                }
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                // Add your locations to bounds using builder.include, maybe in a loop
+                builder.include(place.getLatLng());
+                if(latlngFrom != null) {
+                    builder.include(latlngFrom);
+                }
+                LatLngBounds bounds = builder.build();
+
+                //Then construct a cameraUpdate
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 300);
+                //Then move the camera
+                mMap.animateCamera(cameraUpdate);
             }
 
             @Override
@@ -89,27 +147,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    LatLng latlng = new LatLng(latitude, longitude);
-                    Geocoder geocoder = new Geocoder(getApplicationContext());
-                    try {
-                        List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
-                        String str = addressList.get(0).getAddressLine(0);
+                    if (!bootLocation) {
+                        bootLocation = true;
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        latlngTo = new LatLng(latitude, longitude);
+                        Geocoder geocoder = new Geocoder(getApplicationContext());
+                        try {
+                            List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
+                            String str = addressList.get(0).getAddressLine(0);
 
-                        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
-                        String value = str;
-                        placeAutoComplete.setText(value);
-                        if(marker == null) {
-                            marker = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.2f));
+                            placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
+                            String value = str;
+                            placeAutoComplete.setText(value);
+
+                            markerTo = mMap.addMarker(new MarkerOptions().position(latlngTo).title(str));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlngTo, 15.2f));
+
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        else{
-                            marker.remove();
-                            marker = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
                 }
 
@@ -143,13 +201,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
                         String value = str;
                         placeAutoComplete.setText(value);
-                        if(marker == null) {
-                            marker = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
+                        if(markerTo == null) {
+                            markerTo = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.2f));
                         }
                         else{
-                            marker.remove();
-                            marker = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
+                            markerTo.remove();
+                            markerTo = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -189,8 +247,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady (GoogleMap googleMap){
         mMap = googleMap;
-
-
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
