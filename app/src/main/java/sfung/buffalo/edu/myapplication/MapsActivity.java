@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -44,6 +45,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, DirectionFinderListener {
 
@@ -60,6 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String destinationn;
     private double duration;
     private double distance;
+    private String state;
 
 
     @Override
@@ -105,6 +108,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     markerFrom = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getAddress().toString()));
                     latlngFrom = place.getLatLng();
                     destinationn = place.getAddress().toString();
+                    Geocoder gcd = new Geocoder(getApplicationContext());
+                    List<Address> addresses = null;
+                    try {
+                        addresses = gcd.getFromLocation(latlngFrom.latitude, latlngFrom.longitude, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (addresses != null && addresses.size() > 0) {
+                        state = addresses.get(0).getAdminArea();
+                    }
+
                 }
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 // Add your locations to bounds using builder.include, maybe in a loop
@@ -132,11 +146,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     markerTo = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getAddress().toString()));
                     latlngTo = place.getLatLng();
                     pickUp = place.getAddress().toString();
+
                 } else {
                     markerTo.remove();
                     markerTo = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getAddress().toString()));
                     latlngTo = place.getLatLng();
                     pickUp = place.getAddress().toString();
+                    Geocoder gcd = new Geocoder(getApplicationContext());
+                    List<Address> addresses = null;
+                    try {
+                        addresses = gcd.getFromLocation(latlngFrom.latitude, latlngFrom.longitude, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (addresses != null && addresses.size() > 0) {
+                        state = addresses.get(0).getAdminArea();
+                    }
+
                 }
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 // Add your locations to bounds using builder.include, maybe in a loop
@@ -188,10 +214,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         try {
                             List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
                             String str = addressList.get(0).getAddressLine(0);
+                            state = addressList.get(0).getAdminArea();
                             pickUp = str;
                             placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
                             String value = str;
                             placeAutoComplete.setText(value);
+
+
 
                             markerTo = mMap.addMarker(new MarkerOptions().position(latlngTo).title(str));
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlngTo, 15.2f));
@@ -321,10 +350,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
         for (Route route : routes) {
+            double x=0;
+            String dis = route.distance.text.substring(0, route.distance.text.length()-3);
+            if(route.duration.text.charAt(2) != 'h') {
+                x = Integer.parseInt(route.duration.text.substring(0, route.duration.text.length() - 5));
+            }
+            else{
+                x =  Integer.parseInt(route.duration.text.substring(7, 9));
+                x = x + Integer.parseInt(route.duration.text.substring(0, 1)) * 60;
 
-            distance = Double.parseDouble(route.distance.text);
-            duration = Double.parseDouble(route.duration.text);
-            
+            }
+
+            distance = Double.parseDouble(dis);
+
+            duration = x;
+
+            placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
+
+            placeAutoComplete.setText(state);
+            placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
+
+            placeAutoComplete.setText(Double.toString(duration));
+
+
         }
     }
 }
