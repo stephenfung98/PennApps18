@@ -2,6 +2,7 @@ package sfung.buffalo.edu.myapplication;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -322,6 +323,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+
+
+
     private void sendRequest() {
         String origin = pickUp;
         String destination = destinationn;
@@ -336,6 +340,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         try {
             new DirectionFinder(this, origin, destination).execute();
+            Intent startIntent = new Intent(getApplicationContext(),MainActivity.class);
+            startActivity(startIntent);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -365,12 +371,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             duration = x;
 
-            placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
-
-            placeAutoComplete.setText(state);
-            placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
-
-            placeAutoComplete.setText(Double.toString(duration));
+//            placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
+//
+//            placeAutoComplete.setText(state);
+//            placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
+//
+//            placeAutoComplete.setText(Double.toString(duration));
 
 
         }

@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:gravity="fill"
     android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="61dp"
+        android:layout_gravity="center"
+
+        android:text="FareRide"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="45sp"
+        android:textStyle="bold" />
 
     <fragment
         android:id="@+id/to_autocomplete"
         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
         android:layout_width="match_parent"
+        android:textColor="#ffffff"
         android:layout_height="wrap_content" />
 
     <fragment
         android:id="@+id/from_autocomplete"
         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
         android:layout_width="match_parent"
+        android:textColor="#ffffff"
         android:layout_height="wrap_content" />
 
 
@@ -24,16 +40,22 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight=".80"/>
-        tools:context="sfung.buffalo.edu.myapplication.MapsActivity" />
+        android:layout_weight=".80" />
+    tools:context="sfung.buffalo.edu.myapplication.MapsActivity" />
 
 
     <Button
         android:id="@+id/ComparePrice"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_width="102dp"
+        android:layout_height="37dp"
+        android:layout_gravity="center"
         android:layout_marginRight="1dp"
-        android:text="Compare" />
+        android:autoText="true"
+        android:background="@color/colorPrimary"
+        android:fontFamily="sans-serif"
+        android:text="Compare"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@android:color/black" />
 
 </LinearLayout>
