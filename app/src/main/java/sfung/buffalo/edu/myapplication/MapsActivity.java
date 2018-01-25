@@ -54,7 +54,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     LocationManager locationManager;
-    PlaceAutocompleteFragment placeAutoComplete;
+    PlaceAutocompleteFragment placeAutoCompleteFrom;
     PlaceAutocompleteFragment placeAutoCompleteTo;
     private Marker markerTo;
     private Marker markerFrom;
@@ -89,8 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 != PackageManager.PERMISSION_GRANTED) {
             // Check Permissions Now
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    200);
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},200);
         } else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 
 
@@ -109,9 +108,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             String str = addressList.get(0).getAddressLine(0);
                             state = addressList.get(0).getAdminArea();
                             pickUp = str;
-                            placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
+                            placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
                             String value = str;
-                            placeAutoComplete.setText(value);
+                            placeAutoCompleteFrom.setText(value);
 
 
 
@@ -152,9 +151,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
 
                         String str = addressList.get(0).getAddressLine(0);
-                        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
+                        placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
                         String value = str;
-                        placeAutoComplete.setText(value);
+                        placeAutoCompleteFrom.setText(value);
                         if (markerFrom == null) {
                             markerFrom = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.2f));
@@ -187,24 +186,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             });
         }
 //FROM AUTOCOMPLETE
-        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
-//        ((EditText) placeAutoComplete.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
-        placeAutoComplete.setHint("Enter your pickup location");
-        placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                Log.d("Maps", "Place selected: " + place.getName());
+        placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
+        ((EditText) placeAutoCompleteFrom.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
+        placeAutoCompleteFrom.setHint("Enter your pickup location");
 
-            }
-
-            @Override
-            public void onError(Status status) {
-                Log.d("Maps", "An error occurred: " + status);
-            }
-        });
-
-        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
-        placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
+        placeAutoCompleteFrom.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 if (markerFrom == null) {
@@ -248,10 +235,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 //IDK
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        ((EditText) placeAutoComplete.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
-//        placeAutoComplete.setHint("Enter your destination");
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
 
@@ -260,6 +244,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 //TO AUTOCOMPLETE
         placeAutoCompleteTo = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
+        ((EditText) placeAutoCompleteTo.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
         placeAutoCompleteTo.setHint("Enter your destination");
         placeAutoCompleteTo.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -295,7 +280,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLngBounds bounds = builder.build();
 
                 //Then construct a cameraUpdate
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 300);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 150);
                 //Then move the camera
                 mMap.animateCamera(cameraUpdate);
             }
