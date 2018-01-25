@@ -215,16 +215,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
 
                 }
-                LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                // Add your locations to bounds using builder.include, maybe in a loop
-                builder.include(place.getLatLng());
-                builder.include(latlngFrom);
-                LatLngBounds bounds = builder.build();
+                if(latlngTo != null) {
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    // Add your locations to bounds using builder.include, maybe in a loop
+                    builder.include(place.getLatLng());
 
-                //Then construct a cameraUpdate
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 150);
-                //Then move the camera
-                mMap.animateCamera(cameraUpdate);
+                    builder.include(latlngTo);
+                    LatLngBounds bounds = builder.build();
+
+                    //Then construct a cameraUpdate
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 150);
+                    //Then move the camera
+                    mMap.animateCamera(cameraUpdate);
+                }
+                else{
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlngFrom, 15.2f));
+                }
             }
 
             @Override
