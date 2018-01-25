@@ -1,7 +1,6 @@
 package sfung.buffalo.edu.myapplication;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -15,15 +14,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -31,13 +27,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import sfung.buffalo.edu.myapplication.Modules.DirectionFinder;
 import sfung.buffalo.edu.myapplication.Modules.DirectionFinderListener;
@@ -45,10 +38,7 @@ import sfung.buffalo.edu.myapplication.Modules.Route;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, DirectionFinderListener {
 
@@ -73,7 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        Button button = (Button) findViewById(R.id.ComparePrice);
+        Button button = findViewById(R.id.ComparePrice);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +79,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 != PackageManager.PERMISSION_GRANTED) {
             // Check Permissions Now
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},200);
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
         } else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 
 
@@ -109,9 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             state = addressList.get(0).getAdminArea();
                             pickUp = str;
                             placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
-                            String value = str;
-                            placeAutoCompleteFrom.setText(value);
-
+                            placeAutoCompleteFrom.setText(str);
 
 
                             markerFrom = mMap.addMarker(new MarkerOptions().position(latlngFrom).title(str));
@@ -152,21 +140,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         String str = addressList.get(0).getAddressLine(0);
                         placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
-                        String value = str;
-                        placeAutoCompleteFrom.setText(value);
+                        placeAutoCompleteFrom.setText(str);
                         if (markerFrom == null) {
                             markerFrom = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.2f));
-                            pickUp = value;
+                            pickUp = str;
                         } else {
                             markerFrom.remove();
                             markerFrom = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
-                            pickUp = value;
+                            pickUp = str;
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                 }
 
                 @Override
@@ -188,6 +174,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //FROM AUTOCOMPLETE
         placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
         ((EditText) placeAutoCompleteFrom.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
+        ((EditText) placeAutoCompleteFrom.getView().findViewById(R.id.place_autocomplete_search_input)).setTextColor(Color.WHITE);
         placeAutoCompleteFrom.setHint("Enter your pickup location");
 
         placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
@@ -215,7 +202,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
 
                 }
-                if(latlngTo != null) {
+                if (latlngTo != null) {
                     LatLngBounds.Builder builder = new LatLngBounds.Builder();
                     // Add your locations to bounds using builder.include, maybe in a loop
                     builder.include(place.getLatLng());
@@ -227,8 +214,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 150);
                     //Then move the camera
                     mMap.animateCamera(cameraUpdate);
-                }
-                else{
+                } else {
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlngFrom, 15.2f));
                 }
             }
@@ -245,12 +231,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
 
-
-
-
 //TO AUTOCOMPLETE
         placeAutoCompleteTo = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
         ((EditText) placeAutoCompleteTo.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
+        ((EditText) placeAutoCompleteTo.getView().findViewById(R.id.place_autocomplete_search_input)).setTextColor(Color.WHITE);
         placeAutoCompleteTo.setHint("Enter your destination");
         placeAutoCompleteTo.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -327,9 +311,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
-
-
     private void sendRequest() {
         String origin = pickUp;
         String destination = destinationn;
@@ -344,7 +325,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         try {
             new DirectionFinder(this, origin, destination).execute();
-            Intent startIntent = new Intent(getApplicationContext(),MainActivity.class);
+            Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(startIntent);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -360,13 +341,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
         for (Route route : routes) {
-            double x=0;
-            String dis = route.distance.text.substring(0, route.distance.text.length()-3);
-            if(route.duration.text.charAt(2) != 'h') {
+            double x;
+            String dis = route.distance.text.substring(0, route.distance.text.length() - 3);
+            if (route.duration.text.charAt(2) != 'h') {
                 x = Integer.parseInt(route.duration.text.substring(0, route.duration.text.length() - 5));
-            }
-            else{
-                x =  Integer.parseInt(route.duration.text.substring(7, 9));
+            } else {
+                x = Integer.parseInt(route.duration.text.substring(7, 9));
                 x = x + Integer.parseInt(route.duration.text.substring(0, 1)) * 60;
 
             }
@@ -386,3 +366,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 }
+
