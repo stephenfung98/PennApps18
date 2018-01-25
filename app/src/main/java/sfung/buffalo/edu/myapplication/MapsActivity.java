@@ -47,6 +47,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, DirectionFinderListener {
 
@@ -75,12 +76,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendRequest();
+                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(startIntent);
+//                sendRequest();
             }
         });
 
 
-        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
+        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
         ((EditText) placeAutoComplete.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
         placeAutoComplete.setHint("Enter your pickup location");
         placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -96,7 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
+        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
         placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
