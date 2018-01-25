@@ -10,56 +10,78 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"
-        android:layout_height="445dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="435dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
         <fragment
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="519dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <fragment
-            android:id="@+id/from_autocomplete"
-            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-            android:layout_width="0dp"
-            android:layout_height="39dp"
+        <Button
+            android:id="@+id/ComparePrice"
+            android:layout_width="126dp"
+            android:layout_height="48dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:textColor="#ffffff"
+            android:autoText="true"
+            android:background="@color/colorPrimary"
+            android:fontFamily="sans-serif"
+            android:text="Compare"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <fragment
-            android:id="@+id/to_autocomplete"
-            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-            android:layout_width="0dp"
-            android:layout_height="39dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:textColor="#ffffff"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.1" />
+            app:layout_constraintVertical_bias="0.984" />
 
     </android.support.constraint.ConstraintLayout>
+
+    <fragment
+        android:id="@+id/to_autocomplete"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        android:layout_width="0dp"
+        android:layout_height="39dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.227" />
+
+    <fragment
+        android:id="@+id/from_autocomplete"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        android:layout_width="0dp"
+        android:layout_height="39dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.154" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -72,10 +94,10 @@
         android:src="@mipmap/ic_launcher"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/titleTextView"
-        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintHorizontal_bias="0.92"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.00999999" />
+        app:layout_constraintVertical_bias="0.015" />
 
     <TextView
         android:id="@+id/titleTextView"
@@ -106,27 +128,7 @@
 
 
 
+
+
     ]]>
-
-    <Button
-        android:id="@+id/ComparePrice"
-        android:layout_width="126dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:autoText="true"
-        android:background="@color/colorPrimary"
-        android:fontFamily="sans-serif"
-        android:text="Compare"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.984" />
-
 </android.support.constraint.ConstraintLayout>
