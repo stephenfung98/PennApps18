@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -62,7 +64,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
+        Typeface myTypeface = Typeface.createFromAsset(getAssets(), "poiret_one.ttf");
+        TextView myTextView = (TextView) findViewById(R.id.titleTextView);
+        myTextView.setTypeface(myTypeface);
         Button button = findViewById(R.id.ComparePrice);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
