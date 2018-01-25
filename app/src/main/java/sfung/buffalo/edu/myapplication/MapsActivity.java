@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -82,9 +83,112 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        //GETS LOCATION
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Check Permissions Now
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    200);
+        } else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 
+
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    if (!bootLocation) {
+                        bootLocation = true;
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        latlngFrom = new LatLng(latitude, longitude);
+                        Geocoder geocoder = new Geocoder(getApplicationContext());
+
+                        try {
+                            List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
+                            String str = addressList.get(0).getAddressLine(0);
+                            state = addressList.get(0).getAdminArea();
+                            pickUp = str;
+                            placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
+                            String value = str;
+                            placeAutoComplete.setText(value);
+
+
+
+                            markerFrom = mMap.addMarker(new MarkerOptions().position(latlngFrom).title(str));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlngFrom, 15.2f));
+
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            });
+        } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    LatLng latlng = new LatLng(latitude, longitude);
+                    Geocoder geocoder = new Geocoder(getApplicationContext());
+                    try {
+                        List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
+
+                        String str = addressList.get(0).getAddressLine(0);
+                        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
+                        String value = str;
+                        placeAutoComplete.setText(value);
+                        if (markerFrom == null) {
+                            markerFrom = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.2f));
+                            pickUp = value;
+                        } else {
+                            markerFrom.remove();
+                            markerFrom = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
+                            pickUp = value;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            });
+        }
+//FROM AUTOCOMPLETE
         placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
-        ((EditText) placeAutoComplete.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
+//        ((EditText) placeAutoComplete.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
         placeAutoComplete.setHint("Enter your pickup location");
         placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -99,7 +203,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
+        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
         placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -127,11 +231,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 // Add your locations to bounds using builder.include, maybe in a loop
                 builder.include(place.getLatLng());
-                builder.include(latlngTo);
+                builder.include(latlngFrom);
                 LatLngBounds bounds = builder.build();
 
                 //Then construct a cameraUpdate
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 300);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 150);
                 //Then move the camera
                 mMap.animateCamera(cameraUpdate);
             }
@@ -142,7 +246,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+
+//IDK
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        ((EditText) placeAutoComplete.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
+//        placeAutoComplete.setHint("Enter your destination");
+        mapFragment.getMapAsync(this);
+
+
+
+
+
+//TO AUTOCOMPLETE
         placeAutoCompleteTo = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
+        placeAutoCompleteTo.setHint("Enter your destination");
         placeAutoCompleteTo.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -189,114 +307,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        ((EditText) placeAutoComplete.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
-        placeAutoComplete.setHint("Enter your destination");
-        mapFragment.getMapAsync(this);
-
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Check Permissions Now
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    200);
-        } else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-
-
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    if (!bootLocation) {
-                        bootLocation = true;
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
-                        latlngTo = new LatLng(latitude, longitude);
-                        Geocoder geocoder = new Geocoder(getApplicationContext());
-
-                        try {
-                            List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
-                            String str = addressList.get(0).getAddressLine(0);
-                            state = addressList.get(0).getAdminArea();
-                            pickUp = str;
-                            placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
-                            String value = str;
-                            placeAutoComplete.setText(value);
-
-
-
-                            markerTo = mMap.addMarker(new MarkerOptions().position(latlngTo).title(str));
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlngTo, 15.2f));
-
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
-
-                }
-            });
-        } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    LatLng latlng = new LatLng(latitude, longitude);
-                    Geocoder geocoder = new Geocoder(getApplicationContext());
-                    try {
-                        List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
-
-                        String str = addressList.get(0).getAddressLine(0);
-                        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
-                        String value = str;
-                        placeAutoComplete.setText(value);
-                        if (markerTo == null) {
-                            markerTo = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.2f));
-                            pickUp = value;
-                        } else {
-                            markerTo.remove();
-                            markerTo = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
-                            pickUp = value;
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
-
-                }
-            });
-        }
     }
 
 
