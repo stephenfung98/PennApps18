@@ -19,7 +19,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.models.nosql.PriceStoreDO;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -33,11 +35,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 
 import sfung.buffalo.edu.myapplication.Modules.DirectionFinder;
 import sfung.buffalo.edu.myapplication.Modules.DirectionFinderListener;
 import sfung.buffalo.edu.myapplication.Modules.Route;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -54,26 +56,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LatLng latlngFrom;
     boolean bootLocation = false;
     private String pickUp;
-    private String destinationn;
+    private String destination;
     private double duration;
     private double distance;
     private String state;
+    DynamoDBMapper dynamoDBMapper;
+    double totalPrice;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //establish a connection with AWS Mobile
+        AWSMobileClient.getInstance().initialize(this).execute();
+        //DynamoDBMapper client
+        AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(AWSMobileClient.getInstance().getCredentialsProvider());
+        this.dynamoDBMapper = DynamoDBMapper.builder()
+                .dynamoDBClient(dynamoDBClient)
+                .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                .build();
+
         setContentView(R.layout.activity_maps);
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "poiret_one.ttf");
-        TextView myTextView = (TextView) findViewById(R.id.titleTextView);
+        TextView myTextView = findViewById(R.id.titleTextView);
         myTextView.setTypeface(myTypeface);
         Button button = findViewById(R.id.ComparePrice);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(startIntent);
-//                sendRequest();
+//                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+//                startActivity(startIntent);
+                sendRequest();
             }
         });
 
@@ -188,12 +202,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (markerFrom == null) {
                     markerFrom = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getAddress().toString()));
                     latlngFrom = place.getLatLng();
-                    destinationn = place.getAddress().toString();
+                    pickUp = place.getAddress().toString();
                 } else {
                     markerFrom.remove();
                     markerFrom = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getAddress().toString()));
                     latlngFrom = place.getLatLng();
-                    destinationn = place.getAddress().toString();
+                    pickUp = place.getAddress().toString();
                     Geocoder gcd = new Geocoder(getApplicationContext());
                     List<Address> addresses = null;
                     try {
@@ -246,13 +260,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (markerTo == null) {
                     markerTo = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getAddress().toString()));
                     latlngTo = place.getLatLng();
-                    pickUp = place.getAddress().toString();
+                    destination = place.getAddress().toString();
 
                 } else {
                     markerTo.remove();
                     markerTo = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getAddress().toString()));
                     latlngTo = place.getLatLng();
-                    pickUp = place.getAddress().toString();
+                    destination = place.getAddress().toString();
                     Geocoder gcd = new Geocoder(getApplicationContext());
                     List<Address> addresses = null;
                     try {
@@ -316,21 +330,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private void sendRequest() {
-        String origin = pickUp;
-        String destination = destinationn;
         if (markerTo == null) {
-            Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+            Toast.makeText(this, "Please enter a pickup address!", Toast.LENGTH_SHORT).show();
+        return;
+    }
         if (markerFrom == null) {
             Toast.makeText(this, "Please enter destination address!", Toast.LENGTH_SHORT).show();
             return;
         }
-
         try {
-            new DirectionFinder(this, origin, destination).execute();
-            Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(startIntent);
+            new DirectionFinder(this, pickUp, destination).execute();
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -359,15 +369,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             duration = x;
 
-//            placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
-//
-//            placeAutoComplete.setText(state);
-//            placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
-//
-//            placeAutoComplete.setText(Double.toString(duration));
+            readNews();
 
 
+
+
+//            //used for testing
+//            placeAutoCompleteTo = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
+//            placeAutoCompleteTo.setText(Double.toString(distance));
+//
+//            placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
+//            placeAutoCompleteFrom.setText(Double.toString(duration));
         }
     }
+
+
+    public void readNews() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                PriceStoreDO priceGetter = dynamoDBMapper.load(PriceStoreDO.class, "New York");
+
+                totalPrice = priceGetter.getA() + priceGetter.getB();
+
+
+            }
+        }).start();
+        Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(startIntent);
+        setContentView(R.layout.activity_main);
+        ((TextView) findViewById(R.id.lyftLinetextView)).setText(Double.toString(totalPrice));
+//
+//        setContentView(R.layout.activity_maps);
+
+//        placeAutoCompleteTo.setText(state);
+    }
+
+
+
 }
 

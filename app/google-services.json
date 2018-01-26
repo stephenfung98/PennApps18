@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "485811426133",
+    "firebase_url": "https://fareride-d3e2a.firebaseio.com",
+    "project_id": "fareride-d3e2a",
+    "storage_bucket": "fareride-d3e2a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485811426133:android:5c9fee7bc71b4367",
+        "android_client_info": {
+          "package_name": "sfung.buffalo.edu.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "485811426133-hp42ki3cftkk1n42bd0cptijejebkmt1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sfung.buffalo.edu.myapplication",
+            "certificate_hash": "c712a36d35bc673decea66c17699dba6a7f8d8ba"
+          }
+        },
+        {
+          "client_id": "485811426133-gug82jj2c239vmnsp278i8g352cv8pib.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAVccsXwp-8KhiHKvmPJIYmpWxQE48wxY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "485811426133-gug82jj2c239vmnsp278i8g352cv8pib.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
