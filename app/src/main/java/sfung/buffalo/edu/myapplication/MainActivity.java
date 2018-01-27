@@ -7,9 +7,6 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity{
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         MapsActivity mapsActivity = new MapsActivity();
@@ -19,7 +16,5 @@ public class MainActivity extends Activity{
         TextView LyftTextView = findViewById(R.id.lyftLinetextView);
         LyftTextView.setTypeface(LyftTypeFace);
         ((TextView) findViewById(R.id.lyftLinetextView)).setText(Double.toString(mapsActivity.totalPrice));
-
     }
-
 }
