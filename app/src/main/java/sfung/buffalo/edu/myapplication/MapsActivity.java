@@ -60,7 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double distance;
     private String state;
     DynamoDBMapper dynamoDBMapper;
-    double totalPrice;
+    static double totalPrice;
     PriceStoreDO priceGetter;
 
 
@@ -314,7 +314,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -340,13 +339,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
-
-
-
     @Override
     public void onDirectionFinderStart() {
-
     }
 
     @Override
@@ -366,7 +360,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             duration = x;
 
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -375,20 +368,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }).start();
 
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-
-            Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(startIntent);
-            setContentView(R.layout.activity_main);
-            ((TextView) findViewById(R.id.lyftLinetextView)).setText("$" + Double.toString(totalPrice));
-
-
+            Intent priceIntent = new Intent (this, MainActivity.class);
+            startActivity(priceIntent);
 
 
 //            //used for testing
@@ -399,6 +380,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //            placeAutoCompleteFrom.setText(Double.toString(duration));
         }
     }
-
 }
 

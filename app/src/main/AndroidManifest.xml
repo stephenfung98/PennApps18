@@ -54,7 +54,8 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_main"></activity>
+            android:label="@string/title_activity_main">
+        </activity>
     </application>
 
 </manifest>
