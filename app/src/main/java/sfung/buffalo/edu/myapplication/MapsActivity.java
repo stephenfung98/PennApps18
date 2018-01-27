@@ -36,7 +36,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-
 import sfung.buffalo.edu.myapplication.Modules.DirectionFinder;
 import sfung.buffalo.edu.myapplication.Modules.DirectionFinderListener;
 import sfung.buffalo.edu.myapplication.Modules.Route;
@@ -62,6 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String state;
     DynamoDBMapper dynamoDBMapper;
     double totalPrice;
+    PriceStoreDO priceGetter;
 
 
 
@@ -70,7 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         //establish a connection with AWS Mobile
         AWSMobileClient.getInstance().initialize(this).execute();
-        //DynamoDBMapper client
+//DynamoDBMapper client
         AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(AWSMobileClient.getInstance().getCredentialsProvider());
         this.dynamoDBMapper = DynamoDBMapper.builder()
                 .dynamoDBClient(dynamoDBClient)
@@ -85,10 +85,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(startIntent);
-                sendRequest();
-            }
+                    if (markerTo == null) {
+                        Toast.makeText(MapsActivity.this ,"Please enter a pickup address!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (markerFrom == null) {
+                        Toast.makeText(MapsActivity.this, "Please enter destination address!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    try {
+                        new DirectionFinder(MapsActivity.this, pickUp, destination).execute();
+
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+
         });
 
         //GETS LOCATION
@@ -329,22 +341,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    private void sendRequest() {
-        if (markerTo == null) {
-            Toast.makeText(this, "Please enter a pickup address!", Toast.LENGTH_SHORT).show();
-        return;
-    }
-        if (markerFrom == null) {
-            Toast.makeText(this, "Please enter destination address!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            new DirectionFinder(this, pickUp, destination).execute();
 
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     @Override
@@ -369,43 +366,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             duration = x;
 
-            readNews();
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    priceGetter = dynamoDBMapper.load(PriceStoreDO.class, "New York");
+                    totalPrice = dynamoDBMapper.load(PriceStoreDO.class, "New York").getA();
+                }
+            }).start();
+
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+            Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(startIntent);
+            setContentView(R.layout.activity_main);
+            ((TextView) findViewById(R.id.lyftLinetextView)).setText("$" + Double.toString(totalPrice));
 
 
 
 
 //            //used for testing
 //            placeAutoCompleteTo = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
-//            placeAutoCompleteTo.setText(Double.toString(distance));
+//            placeAutoCompleteTo.setText(Double.toString(totalPrice));
 //
 //            placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
 //            placeAutoCompleteFrom.setText(Double.toString(duration));
         }
     }
-
-
-    public void readNews() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                PriceStoreDO priceGetter = dynamoDBMapper.load(PriceStoreDO.class, "New York");
-
-                totalPrice = priceGetter.getA() + priceGetter.getB();
-
-
-            }
-        }).start();
-        Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(startIntent);
-        setContentView(R.layout.activity_main);
-        ((TextView) findViewById(R.id.lyftLinetextView)).setText(Double.toString(totalPrice));
-//
-//        setContentView(R.layout.activity_maps);
-
-//        placeAutoCompleteTo.setText(state);
-    }
-
-
 
 }
 
