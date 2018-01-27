@@ -61,7 +61,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double distance;
     private String state;
     DynamoDBMapper dynamoDBMapper;
-    UberPricesDO priceGetter;
+
+    UberPricesDO uberPricesDO;
+    LyftPricesDO lyftPricesDO;
 
     static double lyftLinePrice;
     static double lyftPrice;
