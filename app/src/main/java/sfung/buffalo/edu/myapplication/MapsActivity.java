@@ -20,7 +20,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.models.nosql.PriceStoreDO;
+import com.amazonaws.models.nosql.LyftPricesDO;
+import com.amazonaws.models.nosql.UberPricesDO;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -60,8 +61,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double distance;
     private String state;
     DynamoDBMapper dynamoDBMapper;
-    static double totalPrice;
-    PriceStoreDO priceGetter;
+    UberPricesDO priceGetter;
+
+    static double lyftLinePrice;
+    static double lyftPrice;
+    static double lyftPlusPrice;
+    static double lyftLux;
+    static double lyftLuxSUV;
+
+    static double uberPoolPrice;
+    static double uberXPrice;
+    static double uberXLPrice;
+    static double uberBlackPrice;
+    static double uberSUVPrice;
 
 
 
@@ -363,22 +375,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    priceGetter = dynamoDBMapper.load(PriceStoreDO.class, "New York");
-                    totalPrice = dynamoDBMapper.load(PriceStoreDO.class, "New York").getA();
+                    lyftPrice = dynamoDBMapper.load(LyftPricesDO.class, state).getBaseLyft() + dynamoDBMapper.load(LyftPricesDO.class, state).getMinuteLyft() * duration + dynamoDBMapper.load(LyftPricesDO.class, state).getMileLyft() * distance;
                 }
             }).start();
 
             Intent priceIntent = new Intent (this, MainActivity.class);
             startActivity(priceIntent);
-
-
-//            //used for testing
-//            placeAutoCompleteTo = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.to_autocomplete);
-//            placeAutoCompleteTo.setText(Double.toString(totalPrice));
-//
-//            placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
-//            placeAutoCompleteFrom.setText(Double.toString(duration));
         }
     }
 }
-
