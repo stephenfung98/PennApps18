@@ -1,6 +1,5 @@
 package sfung.buffalo.edu.myapplication;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -19,7 +18,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.models.nosql.LyftPricesDO;
 import com.amazonaws.models.nosql.UberPricesDO;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
@@ -36,13 +37,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import sfung.buffalo.edu.myapplication.Modules.DirectionFinder;
-import sfung.buffalo.edu.myapplication.Modules.DirectionFinderListener;
-import sfung.buffalo.edu.myapplication.Modules.Route;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import sfung.buffalo.edu.myapplication.Modules.DirectionFinder;
+import sfung.buffalo.edu.myapplication.Modules.DirectionFinderListener;
+import sfung.buffalo.edu.myapplication.Modules.Route;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, DirectionFinderListener {
 
@@ -89,41 +91,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
 
         setContentView(R.layout.activity_maps);
-        //changes font for fairRide
-        Typeface myTypeface = Typeface.createFromAsset(getAssets(), "poiret_one.ttf");
-        TextView myTextView = findViewById(R.id.titleTextView);
-        myTextView.setTypeface(myTypeface);
-        //compare price button
-        Button button = findViewById(R.id.ComparePrice);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //if either pickup or destination is empty, pop up an error box, else create a new direction finder with pick up and destination
-                    if (markerTo == null) {
-                        Toast.makeText(MapsActivity.this ,"Please enter a pickup address!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (markerFrom == null) {
-                        Toast.makeText(MapsActivity.this, "Please enter destination address!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    try {
-                        new DirectionFinder(MapsActivity.this, pickUp, destination).execute();
-
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-        });
-
         //GETS LOCATION
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             // Check Permissions Now
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 200);
         }
         else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
@@ -210,6 +184,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             });
         }
+        //changes font for fairRide
+        Typeface myTypeface = Typeface.createFromAsset(getAssets(), "poiret_one.ttf");
+        TextView myTextView = findViewById(R.id.titleTextView);
+        myTextView.setTypeface(myTypeface);
+        //compare price button
+        Button button = findViewById(R.id.ComparePrice);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //if either pickup or destination is empty, pop up an error box, else create a new direction finder with pick up and destination
+                    if (markerFrom == null) {
+                        Toast.makeText(MapsActivity.this ,"Please enter a pickup address!", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else if (markerTo == null) {
+                        Toast.makeText(MapsActivity.this, "Please enter destination address!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }else {
+
+//                    try {
+//                        new DirectionFinder(MapsActivity.this, pickUp, destination).execute();
+//
+//                    } catch (UnsupportedEncodingException e) {
+//                        e.printStackTrace();
+//                    }
+                        Intent priceIntent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(priceIntent);
+                    }
+                }
+
+        });
+
+
         //FROM AUTOCOMPLETE
         placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
         ((EditText) placeAutoCompleteFrom.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
@@ -305,7 +311,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     builder.include(latlngFrom);
                 }
                 LatLngBounds bounds = builder.build();
+                try {
+                    new DirectionFinder(MapsActivity.this, pickUp, destination).execute();
 
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 //Then construct a cameraUpdate
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 150);
                 //Then move the camera
@@ -393,8 +404,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }).start();
 
             //changes to the price page
-            Intent priceIntent = new Intent (this, MainActivity.class);
-            startActivity(priceIntent);
+//            Intent priceIntent = new Intent (this, MainActivity.class);
+//            startActivity(priceIntent);
         }
     }
 }

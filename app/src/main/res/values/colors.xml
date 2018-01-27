@@ -3,4 +3,5 @@
     <color name="colorPrimary">#fbd102</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#ffffff</color>
+    <color name="lyftColor">#e90d8c</color>
 </resources>
