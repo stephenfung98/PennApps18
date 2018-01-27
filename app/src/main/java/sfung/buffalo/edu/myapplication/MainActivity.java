@@ -16,9 +16,9 @@ public class MainActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Typeface LyftTypeFace = Typeface.createFromAsset(getAssets(), "Montserrat-Regular.ttf");
-        TextView LyftTextView = findViewById(R.id.lyftLinetextView);
+        TextView LyftTextView = findViewById(R.id.lyftLineTextView);
         LyftTextView.setTypeface(LyftTypeFace);
-        ((TextView) findViewById(R.id.lyftLinetextView)).setText(Double.toString(mapsActivity.totalPrice));
+        ((TextView) findViewById(R.id.lyftLinePriceTextView)).setText(Double.toString(mapsActivity.totalPrice));
 
     }
 
