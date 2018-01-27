@@ -384,11 +384,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    uberPoolPrice = dynamoDBMapper.load(UberPricesDO.class, state).getBasePool() + dynamoDBMapper.load(UberPricesDO.class, state).getMinutePool() * duration + dynamoDBMapper.load(UberPricesDO.class, state).getMilePool();
-                    uberXPrice = dynamoDBMapper.load(UberPricesDO.class, state).getBaseX() + dynamoDBMapper.load(UberPricesDO.class, state).getMinuteX() * duration + dynamoDBMapper.load(UberPricesDO.class, state).getMileX();
-                    uberXLPrice = dynamoDBMapper.load(UberPricesDO.class, state).getBaseXL() + dynamoDBMapper.load(UberPricesDO.class, state).getMinuteXL() * duration + dynamoDBMapper.load(UberPricesDO.class, state).getMileXL();
-                    uberBlackPrice = dynamoDBMapper.load(UberPricesDO.class, state).getBaseBlack() + dynamoDBMapper.load(UberPricesDO.class, state).getMinuteBlack() * duration + dynamoDBMapper.load(UberPricesDO.class, state).getMileBlack();
-                    uberSUVPrice = dynamoDBMapper.load(UberPricesDO.class, state).getBaseSUV() + dynamoDBMapper.load(UberPricesDO.class, state).getMinuteSUV() * duration + dynamoDBMapper.load(UberPricesDO.class, state).getMileSUV();
+                    uberPoolPrice = dynamoDBMapper.load(UberPricesDO.class, state).getBasePool() + dynamoDBMapper.load(UberPricesDO.class, state).getMinutePool() * duration + dynamoDBMapper.load(UberPricesDO.class, state).getMilePool() * distance;
+                    uberXPrice = dynamoDBMapper.load(UberPricesDO.class, state).getBaseX() + dynamoDBMapper.load(UberPricesDO.class, state).getMinuteX() * duration + dynamoDBMapper.load(UberPricesDO.class, state).getMileX() * distance;
+                    uberXLPrice = dynamoDBMapper.load(UberPricesDO.class, state).getBaseXL() + dynamoDBMapper.load(UberPricesDO.class, state).getMinuteXL() * duration + dynamoDBMapper.load(UberPricesDO.class, state).getMileXL() * distance;
+                    uberBlackPrice = dynamoDBMapper.load(UberPricesDO.class, state).getBaseBlack() + dynamoDBMapper.load(UberPricesDO.class, state).getMinuteBlack() * duration + dynamoDBMapper.load(UberPricesDO.class, state).getMileBlack()* distance;
+                    uberSUVPrice = dynamoDBMapper.load(UberPricesDO.class, state).getBaseSUV() + dynamoDBMapper.load(UberPricesDO.class, state).getMinuteSUV() * duration + dynamoDBMapper.load(UberPricesDO.class, state).getMileSUV()* distance;
                 }
             }).start();
 
