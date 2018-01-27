@@ -24,12 +24,12 @@ public class UberPricesDO {
     private Double _milePool;
     private Double _mileSUV;
     private Double _mileX;
-    private Double _mileXl;
+    private Double _mileXL;
     private Double _minuteBlack;
     private Double _minutePool;
     private Double _minuteSUV;
     private Double _minuteX;
-    private Double _minuteXl;
+    private Double _minuteXL;
 
     @DynamoDBHashKey(attributeName = "state")
     @DynamoDBAttribute(attributeName = "state")
@@ -112,13 +112,13 @@ public class UberPricesDO {
     public void setMileX(final Double _mileX) {
         this._mileX = _mileX;
     }
-    @DynamoDBAttribute(attributeName = "mileXl")
-    public Double getMileXl() {
-        return _mileXl;
+    @DynamoDBAttribute(attributeName = "mileXL")
+    public Double getMileXL() {
+        return _mileXL;
     }
 
-    public void setMileXl(final Double _mileXl) {
-        this._mileXl = _mileXl;
+    public void setMileXL(final Double _mileXL) {
+        this._mileXL = _mileXL;
     }
     @DynamoDBAttribute(attributeName = "minuteBlack")
     public Double getMinuteBlack() {
@@ -152,13 +152,13 @@ public class UberPricesDO {
     public void setMinuteX(final Double _minuteX) {
         this._minuteX = _minuteX;
     }
-    @DynamoDBAttribute(attributeName = "minuteXl")
-    public Double getMinuteXl() {
-        return _minuteXl;
+    @DynamoDBAttribute(attributeName = "minuteXL")
+    public Double getMinuteXL() {
+        return _minuteXL;
     }
 
-    public void setMinuteXl(final Double _minuteXl) {
-        this._minuteXl = _minuteXl;
+    public void setMinuteXL(final Double _minuteXL) {
+        this._minuteXL = _minuteXL;
     }
 
 }
