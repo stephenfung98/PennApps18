@@ -92,6 +92,7 @@ public class MainActivity extends Activity {
             ((TextView) findViewById(R.id.uberSUVPriceTextView)).setText("N/A");
         }
 
+
 //        Typeface LyftTypeFace = Typeface.createFromAsset(getAssets(), "Montserrat-Bold.ttf");
 //        TextView lyftL = (TextView) findViewById(R.id.lyftLineTextView);
 //        lyftL.setTypeface(LyftTypeFace);
@@ -103,7 +104,6 @@ public class MainActivity extends Activity {
 //        lyftLux.setTypeface(LyftTypeFace);
 //        TextView lyftS = (TextView) findViewById(R.id.lyftLuxSUVTextView);
 //        lyftS.setTypeface(LyftTypeFace);
-
     }
 
 }

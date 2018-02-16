@@ -30,6 +30,7 @@ public class LyftPricesDO {
     private Double _minuteLuxSUV;
     private Double _minuteLyft;
     private Double _minutePlus;
+    private Double _taxAndFees;
 
     @DynamoDBHashKey(attributeName = "state")
     @DynamoDBAttribute(attributeName = "state")
@@ -159,6 +160,14 @@ public class LyftPricesDO {
 
     public void setMinutePlus(final Double _minutePlus) {
         this._minutePlus = _minutePlus;
+    }
+    @DynamoDBAttribute(attributeName = "taxAndFees")
+    public Double getTaxAndFees() {
+        return _taxAndFees;
+    }
+
+    public void setTaxAndFees(final Double _taxAndFees) {
+        this._taxAndFees = _taxAndFees;
     }
 
 }
