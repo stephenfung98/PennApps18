@@ -20,16 +20,19 @@ public class LyftPricesDO {
     private Double _baseLuxSUV;
     private Double _baseLyft;
     private Double _basePlus;
+    private Double _basePremier;
     private Double _mileLine;
     private Double _mileLux;
     private Double _mileLuxSUV;
     private Double _mileLyft;
     private Double _milePlus;
+    private Double _milePremier;
     private Double _minuteLine;
     private Double _minuteLux;
     private Double _minuteLuxSUV;
     private Double _minuteLyft;
     private Double _minutePlus;
+    private Double _minutePremier;
     private Double _taxAndFees;
 
     @DynamoDBHashKey(attributeName = "state")
@@ -81,6 +84,14 @@ public class LyftPricesDO {
     public void setBasePlus(final Double _basePlus) {
         this._basePlus = _basePlus;
     }
+    @DynamoDBAttribute(attributeName = "basePremier")
+    public Double getBasePremier() {
+        return _basePremier;
+    }
+
+    public void setBasePremier(final Double _basePremier) {
+        this._basePremier = _basePremier;
+    }
     @DynamoDBAttribute(attributeName = "mileLine")
     public Double getMileLine() {
         return _mileLine;
@@ -121,6 +132,14 @@ public class LyftPricesDO {
     public void setMilePlus(final Double _milePlus) {
         this._milePlus = _milePlus;
     }
+    @DynamoDBAttribute(attributeName = "milePremier")
+    public Double getMilePremier() {
+        return _milePremier;
+    }
+
+    public void setMilePremier(final Double _milePremier) {
+        this._milePremier = _milePremier;
+    }
     @DynamoDBAttribute(attributeName = "minuteLine")
     public Double getMinuteLine() {
         return _minuteLine;
@@ -160,6 +179,14 @@ public class LyftPricesDO {
 
     public void setMinutePlus(final Double _minutePlus) {
         this._minutePlus = _minutePlus;
+    }
+    @DynamoDBAttribute(attributeName = "minutePremier")
+    public Double getMinutePremier() {
+        return _minutePremier;
+    }
+
+    public void setMinutePremier(final Double _minutePremier) {
+        this._minutePremier = _minutePremier;
     }
     @DynamoDBAttribute(attributeName = "taxAndFees")
     public Double getTaxAndFees() {

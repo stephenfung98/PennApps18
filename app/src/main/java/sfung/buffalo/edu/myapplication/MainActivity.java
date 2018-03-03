@@ -1,7 +1,6 @@
 package sfung.buffalo.edu.myapplication;
 
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -25,20 +24,20 @@ public class MainActivity extends Activity {
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
         //change the lyft section's price
-        if (mapsActivity.lyftLinePrice != 0) {
-            ((TextView) findViewById(R.id.lyftLinePriceTextView)).setText(formatter.format(mapsActivity.lyftLinePrice));
+        if (mapsActivity.lyftPrice != 0) {
+            ((TextView) findViewById(R.id.lyftLinePriceTextView)).setText(formatter.format(mapsActivity.lyftPrice));
         }
         else {
             ((TextView) findViewById(R.id.lyftLinePriceTextView)).setText("N/A");
         }
-        if (mapsActivity.lyftPrice != 0) {
-            ((TextView) findViewById(R.id.lyftPriceTextView)).setText(formatter.format(mapsActivity.lyftPrice));
+        if (mapsActivity.lyftPlusPrice != 0) {
+            ((TextView) findViewById(R.id.lyftPriceTextView)).setText(formatter.format(mapsActivity.lyftPlusPrice));
         }
         else {
             ((TextView) findViewById(R.id.lyftPriceTextView)).setText("N/A");
         }
-        if (mapsActivity.lyftPlusPrice != 0) {
-            ((TextView) findViewById(R.id.lyftPlusPriceTextView)).setText(formatter.format(mapsActivity.lyftPlusPrice));
+        if (mapsActivity.lyftPremierPrice != 0) {
+            ((TextView) findViewById(R.id.lyftPlusPriceTextView)).setText(formatter.format(mapsActivity.lyftPremierPrice));
         }
         else {
             ((TextView) findViewById(R.id.lyftPlusPriceTextView)).setText("N/A");
@@ -55,6 +54,7 @@ public class MainActivity extends Activity {
         else {
             ((TextView) findViewById(R.id.lyftLuxSUVPriceTextView)).setText("N/A");
         }
+
 
         //change the uber section's price
         if(mapsActivity.uberPoolPrice != 0) {
