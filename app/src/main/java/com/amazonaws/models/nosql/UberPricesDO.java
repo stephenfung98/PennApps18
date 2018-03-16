@@ -18,16 +18,19 @@ public class UberPricesDO {
     private Double _baseBlack;
     private Double _basePool;
     private Double _baseSUV;
+    private Double _baseSelect;
     private Double _baseX;
     private Double _baseXL;
     private Double _mileBlack;
     private Double _milePool;
     private Double _mileSUV;
+    private Double _mileSelect;
     private Double _mileX;
     private Double _mileXL;
     private Double _minuteBlack;
     private Double _minutePool;
     private Double _minuteSUV;
+    private Double _minuteSelect;
     private Double _minuteX;
     private Double _minuteXL;
     private Double _taxAndFees;
@@ -64,6 +67,14 @@ public class UberPricesDO {
 
     public void setBaseSUV(final Double _baseSUV) {
         this._baseSUV = _baseSUV;
+    }
+    @DynamoDBAttribute(attributeName = "baseSelect")
+    public Double getBaseSelect() {
+        return _baseSelect;
+    }
+
+    public void setBaseSelect(final Double _baseSelect) {
+        this._baseSelect = _baseSelect;
     }
     @DynamoDBAttribute(attributeName = "baseX")
     public Double getBaseX() {
@@ -105,6 +116,14 @@ public class UberPricesDO {
     public void setMileSUV(final Double _mileSUV) {
         this._mileSUV = _mileSUV;
     }
+    @DynamoDBAttribute(attributeName = "mileSelect")
+    public Double getMileSelect() {
+        return _mileSelect;
+    }
+
+    public void setMileSelect(final Double _mileSelect) {
+        this._mileSelect = _mileSelect;
+    }
     @DynamoDBAttribute(attributeName = "mileX")
     public Double getMileX() {
         return _mileX;
@@ -144,6 +163,14 @@ public class UberPricesDO {
 
     public void setMinuteSUV(final Double _minuteSUV) {
         this._minuteSUV = _minuteSUV;
+    }
+    @DynamoDBAttribute(attributeName = "minuteSelect")
+    public Double getMinuteSelect() {
+        return _minuteSelect;
+    }
+
+    public void setMinuteSelect(final Double _minuteSelect) {
+        this._minuteSelect = _minuteSelect;
     }
     @DynamoDBAttribute(attributeName = "minuteX")
     public Double getMinuteX() {
