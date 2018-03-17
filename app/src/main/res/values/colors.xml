@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#fbd102</color>
+    <color name="colorPrimary">#542b7c</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#ffffff</color>
-    <color name="lyftColor">#e90d8c</color>
+    <color name="white">#ffffff</color>
+    <color name="Uber">#000000</color>
+    <color name="Lyft">#e90d8c</color>
 </resources>

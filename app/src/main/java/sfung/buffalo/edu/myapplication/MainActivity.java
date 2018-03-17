@@ -16,11 +16,11 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         //wait one second to allow the information to come back from AWS
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
         //change the lyft section's price
