@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 import com.amazonaws.models.nosql.LyftPricesDO;
 import com.amazonaws.models.nosql.UberPricesDO;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
@@ -39,7 +40,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import sfung.buffalo.edu.myapplication.Modules.DirectionFinder;
 import sfung.buffalo.edu.myapplication.Modules.DirectionFinderListener;
@@ -401,16 +404,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             duration = x;
 
+
+
+
+
+
+
+
+
             //thread for lyft
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    LyftPricesDO lyftPricesDO = dynamoDBMapper.load(LyftPricesDO.class, city);
 //                    lyftLinePrice = (dynamoDBMapper.load(LyftPricesDO.class, city).getBaseLine() + dynamoDBMapper.load(LyftPricesDO.class, city).getMinuteLine() * duration + dynamoDBMapper.load(LyftPricesDO.class, city).getMileLine() * distance) * dynamoDBMapper.load(LyftPricesDO.class, city).getTaxAndFees();
-                    lyftPrice = (dynamoDBMapper.load(LyftPricesDO.class, city).getBaseLyft() + dynamoDBMapper.load(LyftPricesDO.class, city).getMinuteLyft() * duration + dynamoDBMapper.load(LyftPricesDO.class, city).getMileLyft() * distance) * dynamoDBMapper.load(LyftPricesDO.class, city).getTaxAndFees();
-                    lyftPlusPrice = (dynamoDBMapper.load(LyftPricesDO.class, city).getBasePlus() + dynamoDBMapper.load(LyftPricesDO.class, city).getMinutePlus() * duration + dynamoDBMapper.load(LyftPricesDO.class, city).getMilePlus() * distance) * dynamoDBMapper.load(LyftPricesDO.class, city).getTaxAndFees();
-                    lyftPremierPrice = (dynamoDBMapper.load(LyftPricesDO.class, city).getBasePremier() + dynamoDBMapper.load(LyftPricesDO.class, city).getMinutePremier() * duration + dynamoDBMapper.load(LyftPricesDO.class, city).getMilePremier() * distance) * dynamoDBMapper.load(LyftPricesDO.class, city).getTaxAndFees();
-                    lyftLuxPrice = (dynamoDBMapper.load(LyftPricesDO.class, city).getBaseLux() + dynamoDBMapper.load(LyftPricesDO.class, city).getMinuteLux() * duration + dynamoDBMapper.load(LyftPricesDO.class, city).getMileLux() * distance) * dynamoDBMapper.load(LyftPricesDO.class, city).getTaxAndFees();
-                    lyftLuxSUVPrice = (dynamoDBMapper.load(LyftPricesDO.class, city).getBaseLuxSUV() + dynamoDBMapper.load(LyftPricesDO.class, city).getMinuteLuxSUV() * duration + dynamoDBMapper.load(LyftPricesDO.class, city).getMileLuxSUV() * distance) * dynamoDBMapper.load(LyftPricesDO.class, city).getTaxAndFees();
+                    lyftPrice = (lyftPricesDO.getBaseLyft() + lyftPricesDO.getMinuteLyft() * duration + lyftPricesDO.getMileLyft() * distance) * lyftPricesDO.getTaxAndFees();
+                    lyftPlusPrice = (lyftPricesDO.getBasePlus() + lyftPricesDO.getMinutePlus() * duration + lyftPricesDO.getMilePlus() * distance) * lyftPricesDO.getTaxAndFees();
+                    lyftPremierPrice = (lyftPricesDO.getBasePremier() + lyftPricesDO.getMinutePremier() * duration + lyftPricesDO.getMilePremier() * distance) * lyftPricesDO.getTaxAndFees();
+                    lyftLuxPrice = (lyftPricesDO.getBaseLux() + lyftPricesDO.getMinuteLux() * duration + lyftPricesDO.getMileLux() * distance) * lyftPricesDO.getTaxAndFees();
+                    lyftLuxSUVPrice = (lyftPricesDO.getBaseLuxSUV() + lyftPricesDO.getMinuteLuxSUV() * duration + lyftPricesDO.getMileLuxSUV() * distance) * lyftPricesDO.getTaxAndFees();
                 }
             }).start();
 
@@ -418,15 +430,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    UberPricesDO uberPricesDO = dynamoDBMapper.load(UberPricesDO.class, city);
 //                    uberPoolPrice = (dynamoDBMapper.load(UberPricesDO.class, city).getBasePool() + dynamoDBMapper.load(UberPricesDO.class, city).getMinutePool() * duration + dynamoDBMapper.load(UberPricesDO.class, city).getMilePool() * distance) * dynamoDBMapper.load(UberPricesDO.class, city).getTaxAndFees();
-                    uberXPrice = (dynamoDBMapper.load(UberPricesDO.class, city).getBaseX() + dynamoDBMapper.load(UberPricesDO.class, city).getMinuteX() * duration + dynamoDBMapper.load(UberPricesDO.class, city).getMileX() * distance) * dynamoDBMapper.load(UberPricesDO.class, city).getTaxAndFees();
-                    uberXLPrice = (dynamoDBMapper.load(UberPricesDO.class, city).getBaseXL() + dynamoDBMapper.load(UberPricesDO.class, city).getMinuteXL() * duration + dynamoDBMapper.load(UberPricesDO.class, city).getMileXL() * distance) * dynamoDBMapper.load(UberPricesDO.class, city).getTaxAndFees();
-                    uberSelectPrice = (dynamoDBMapper.load(UberPricesDO.class, city).getBaseSelect() + dynamoDBMapper.load(UberPricesDO.class, city).getMinuteSelect() * duration + dynamoDBMapper.load(UberPricesDO.class, city).getMileSelect() * distance) * dynamoDBMapper.load(UberPricesDO.class, city).getTaxAndFees();
-                    uberBlackPrice = (dynamoDBMapper.load(UberPricesDO.class, city).getBaseBlack() + dynamoDBMapper.load(UberPricesDO.class, city).getMinuteBlack() * duration + dynamoDBMapper.load(UberPricesDO.class, city).getMileBlack()* distance) * dynamoDBMapper.load(UberPricesDO.class, city).getTaxAndFees();
-                    uberSUVPrice = (dynamoDBMapper.load(UberPricesDO.class, city).getBaseSUV() + dynamoDBMapper.load(UberPricesDO.class, city).getMinuteSUV() * duration + dynamoDBMapper.load(UberPricesDO.class, city).getMileSUV()* distance) * dynamoDBMapper.load(UberPricesDO.class, city).getTaxAndFees();
+                    uberXPrice = (uberPricesDO.getBaseX() + uberPricesDO.getMinuteX() * duration + uberPricesDO.getMileX() * distance) * uberPricesDO.getTaxAndFees();
+                    uberXLPrice = (uberPricesDO.getBaseXL() + uberPricesDO.getMinuteXL() * duration + uberPricesDO.getMileXL() * distance) * uberPricesDO.getTaxAndFees();
+                    uberSelectPrice = (uberPricesDO.getBaseSelect() + uberPricesDO.getMinuteSelect() * duration + uberPricesDO.getMileSelect() * distance) * uberPricesDO.getTaxAndFees();
+                    uberBlackPrice = (uberPricesDO.getBaseBlack() + uberPricesDO.getMinuteBlack() * duration + uberPricesDO.getMileBlack()* distance) * uberPricesDO.getTaxAndFees();
+                    uberSUVPrice = (uberPricesDO.getBaseSUV() + uberPricesDO.getMinuteSUV() * duration + uberPricesDO.getMileSUV()* distance) * uberPricesDO.getTaxAndFees();
                 }
             }).start();
-
             //changes to the price page
 //            Intent priceIntent = new Intent (this, MainActivity.class);
 //            startActivity(priceIntent);
