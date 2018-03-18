@@ -17,11 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 import com.amazonaws.models.nosql.LyftPricesDO;
 import com.amazonaws.models.nosql.UberPricesDO;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
@@ -38,13 +35,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import sfung.buffalo.edu.myapplication.Modules.DirectionFinder;
 import sfung.buffalo.edu.myapplication.Modules.DirectionFinderListener;
 import sfung.buffalo.edu.myapplication.Modules.Route;
@@ -97,7 +90,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
 
         setContentView(R.layout.activity_maps);
-        //GETS LOCATION
+        //Gets location
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -106,9 +99,65 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 200);
         } else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
-                //on first boot get location and put it in pick up textview
+                //on first boot get location and puts it in the textview
                 @Override
                 public void onLocationChanged(Location location) {
+                    //If it is the first boot, get lat, lng, city, add marker, then get price for the city from AWS
+                    if (!bootLocation) {
+                        bootLocation = true;
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        latlngFrom = new LatLng(latitude, longitude);
+                        Geocoder geocoder = new Geocoder(getApplicationContext());
+                        //gets city from geocoder
+                        try {
+                            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 10);
+                            if (addresses != null && addresses.size() > 0) {
+                                for (Address adr : addresses) {
+                                    if (adr.getLocality() != null && adr.getLocality().length() > 0) {
+                                        city = adr.getLocality();
+                                        break;
+                                    }
+                                }
+                            }
+                            String str = null;
+                            if (addresses != null) {
+                                str = addresses.get(0).getAddressLine(0);
+                            }
+                            pickUp = str;
+                            placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
+                            placeAutoCompleteFrom.setText(str);
+                            markerFrom = mMap.addMarker(new MarkerOptions().position(latlngFrom).title(str));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlngFrom, 15.2f));
+                            //thread to get price of current city at boot
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    lyftPricesDO = dynamoDBMapper.load(LyftPricesDO.class, city);
+                                    uberPricesDO = dynamoDBMapper.load(UberPricesDO.class, city);
+                                }
+                            }).start();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+                @Override
+                public void onProviderEnabled(String provider) {}
+
+                @Override
+                public void onProviderDisabled(String provider) {}
+
+            });
+        } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    //If it is the first boot, get lat, lng, city, add marker, then get price for the city from AWS
                     if (!bootLocation) {
                         bootLocation = true;
                         double latitude = location.getLatitude();
@@ -149,62 +198,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
                 @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                }
+                public void onStatusChanged(String provider, int status, Bundle extras) {}
 
                 @Override
-                public void onProviderEnabled(String provider) {
-
-                }
+                public void onProviderEnabled(String provider) {}
 
                 @Override
-                public void onProviderDisabled(String provider) {
+                public void onProviderDisabled(String provider) {}
 
-                }
-            });
-        } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    LatLng latlng = new LatLng(latitude, longitude);
-                    Geocoder geocoder = new Geocoder(getApplicationContext());
-                    try {
-                        List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
-
-                        String str = addressList.get(0).getAddressLine(0);
-                        placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
-                        placeAutoCompleteFrom.setText(str);
-                        if (markerFrom == null) {
-                            markerFrom = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.2f));
-                            pickUp = str;
-                        } else {
-                            markerFrom.remove();
-                            markerFrom = mMap.addMarker(new MarkerOptions().position(latlng).title(str));
-                            pickUp = str;
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
-
-                }
             });
         }
         //changes font for fairRide
@@ -227,7 +228,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ((EditText) placeAutoCompleteFrom.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
         ((EditText) placeAutoCompleteFrom.getView().findViewById(R.id.place_autocomplete_search_input)).setTextColor(Color.WHITE);
         placeAutoCompleteFrom.setHint("Enter your pickup location");
-
         placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
         placeAutoCompleteFrom.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -267,25 +267,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if (markerTo != null && markerFrom != null) {
                         try {
                             new DirectionFinder(MapsActivity.this, pickUp, destination).execute();
-
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
                     }
-
-
                 }
+                //if there is a to location, add to and from to LatLngBounds and update camera to show both, else just show the from location
                 if (latlngTo != null) {
                     LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                    // Add your locations to bounds using builder.include, maybe in a loop
                     builder.include(place.getLatLng());
-
                     builder.include(latlngTo);
                     LatLngBounds bounds = builder.build();
-
-                    //Then construct a cameraUpdate
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 150);
-                    //Then move the camera
                     mMap.animateCamera(cameraUpdate);
                 } else {
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlngFrom, 15.2f));
@@ -310,20 +303,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         placeAutoCompleteTo.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
+                // if there is no to marker
                 if (markerTo == null) {
                     markerTo = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getAddress().toString()));
                     latlngTo = place.getLatLng();
                     destination = place.getAddress().toString();
+                    //calculates distance and duration from two points
                     if (markerTo != null && markerFrom != null) {
                         try {
                             new DirectionFinder(MapsActivity.this, pickUp, destination).execute();
-
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
                     }
-
-
                 } else {
                     markerTo.remove();
                     markerTo = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getAddress().toString()));
@@ -344,14 +336,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                         }
                     }
-                    //thread to get price when to city is changed
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            lyftPricesDO = dynamoDBMapper.load(LyftPricesDO.class, city);
-//                            uberPricesDO = dynamoDBMapper.load(UberPricesDO.class, city);
-//                        }
-//                    }).start();
+                     //thread to get price when to city is changed
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            lyftPricesDO = dynamoDBMapper.load(LyftPricesDO.class, city);
+                            uberPricesDO = dynamoDBMapper.load(UberPricesDO.class, city);
+                        }
+                    }).start();
                     //Gets distance and duration
                     if (markerTo != null && markerFrom != null) {
                         try {
@@ -361,19 +353,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             e.printStackTrace();
                         }
                     }
-
                 }
+                //to update zoom based on to/from markers
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                // Add your locations to bounds using builder.include, maybe in a loop
                 builder.include(place.getLatLng());
                 if (latlngFrom != null) {
                     builder.include(latlngFrom);
                 }
                 LatLngBounds bounds = builder.build();
-
-                //Then construct a cameraUpdate
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 150);
-                //Then move the camera
                 mMap.animateCamera(cameraUpdate);
             }
 
@@ -429,11 +417,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 x += Integer.parseInt(route.duration.text.substring(0, 1)) * 60;
 
             }
-
             distance = Double.parseDouble(dis);
-
             duration = x;
-
 
             //thread for lyft
             new Thread(new Runnable() {
@@ -460,9 +445,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     uberSUVPrice = (uberPricesDO.getBaseSUV() + uberPricesDO.getMinuteSUV() * duration + uberPricesDO.getMileSUV() * distance) * uberPricesDO.getTaxAndFees();
                 }
             }).start();
-            //changes to the price page
-//            Intent priceIntent = new Intent (this, MainActivity.class);
-//            startActivity(priceIntent);
         }
     }
 }
