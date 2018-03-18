@@ -25,71 +25,65 @@ public class MainActivity extends Activity {
 
         //change the lyft section's price
         if (mapsActivity.lyftPrice != 0) {
-            ((TextView) findViewById(R.id.lyftLinePriceTextView)).setText(formatter.format(mapsActivity.lyftPrice));
+            ((TextView) findViewById(R.id.lyftPrice)).setText(formatter.format(mapsActivity.lyftPrice));
         }
         else {
-            ((TextView) findViewById(R.id.lyftLinePriceTextView)).setText("N/A");
+            ((TextView) findViewById(R.id.lyftPrice)).setText("N/A");
         }
         if (mapsActivity.lyftPlusPrice != 0) {
-            ((TextView) findViewById(R.id.lyftPriceTextView)).setText(formatter.format(mapsActivity.lyftPlusPrice));
+            ((TextView) findViewById(R.id.lyftPlusPrice)).setText(formatter.format(mapsActivity.lyftPlusPrice));
         }
         else {
-            ((TextView) findViewById(R.id.lyftPriceTextView)).setText("N/A");
+            ((TextView) findViewById(R.id.lyftPlusPrice)).setText("N/A");
         }
         if (mapsActivity.lyftPremierPrice != 0) {
-            ((TextView) findViewById(R.id.lyftPlusPriceTextView)).setText(formatter.format(mapsActivity.lyftPremierPrice));
+            ((TextView) findViewById(R.id.lyftPremierPrice)).setText(formatter.format(mapsActivity.lyftPremierPrice));
         }
         else {
-            ((TextView) findViewById(R.id.lyftPlusPriceTextView)).setText("N/A");
+            ((TextView) findViewById(R.id.lyftPremierPrice)).setText("N/A");
         }
         if (mapsActivity.lyftLuxPrice != 0) {
-            ((TextView) findViewById(R.id.lyftLuxPriceTextView)).setText(formatter.format(mapsActivity.lyftLuxPrice));
+            ((TextView) findViewById(R.id.lyftLuxPrice)).setText(formatter.format(mapsActivity.lyftLuxPrice));
         }
         else {
-            ((TextView) findViewById(R.id.lyftLuxPriceTextView)).setText("N/A");
+            ((TextView) findViewById(R.id.lyftLuxPrice)).setText("N/A");
         }
         if (mapsActivity.lyftLuxSUVPrice != 0) {
-            ((TextView) findViewById(R.id.lyftLuxSUVPriceTextView)).setText(formatter.format(mapsActivity.lyftLuxSUVPrice));
+            ((TextView) findViewById(R.id.lyftLuxSUVPrice)).setText(formatter.format(mapsActivity.lyftLuxSUVPrice));
         }
         else {
-            ((TextView) findViewById(R.id.lyftLuxSUVPriceTextView)).setText("N/A");
+            ((TextView) findViewById(R.id.lyftLuxSUVPrice)).setText("N/A");
         }
 
 
         //change the uber section's price
-        if(mapsActivity.uberPoolPrice != 0) {
-            ((TextView) findViewById(R.id.uberPoolPriceTextView)).setText(formatter.format(mapsActivity.uberPoolPrice));
-        }
-        else{
-            ((TextView) findViewById(R.id.uberPoolPriceTextView)).setText("N/A");
-        }
 
         if(mapsActivity.uberXPrice != 0) {
-            ((TextView) findViewById(R.id.uberXPriceTextView)).setText(formatter.format(mapsActivity.uberXPrice));
+            ((TextView) findViewById(R.id.uberXPrice)).setText(formatter.format(mapsActivity.uberXPrice));
         }
         else{
-            ((TextView) findViewById(R.id.uberXPriceTextView)).setText("N/A");
+            ((TextView) findViewById(R.id.uberXPrice)).setText("N/A");
         }
 
         if(mapsActivity.uberXLPrice != 0) {
-            ((TextView) findViewById(R.id.uberXLPriceTextView)).setText(formatter.format(mapsActivity.uberXLPrice));
+            ((TextView) findViewById(R.id.uberXLPrice)).setText(formatter.format(mapsActivity.uberXLPrice));
         }
         else{
-            ((TextView) findViewById(R.id.uberXLPriceTextView)).setText("N/A");
+            ((TextView) findViewById(R.id.uberXL)).setText("N/A");
         }
 
         if(mapsActivity.uberBlackPrice != 0) {
-            ((TextView) findViewById(R.id.uberBlackPriceTextView)).setText(formatter.format(mapsActivity.uberBlackPrice));
+            ((TextView) findViewById(R.id.uberBlackPrice)).setText(formatter.format(mapsActivity.uberBlackPrice));
         }
         else{
-            ((TextView) findViewById(R.id.uberBlackPriceTextView)).setText("N/A");
+            ((TextView) findViewById(R.id.uberBlackPrice)).setText("N/A");
         }
 
         if(mapsActivity.uberSUVPrice != 0) {
-            ((TextView) findViewById(R.id.uberSUVPriceTextView)).setText(formatter.format(mapsActivity.uberSUVPrice));
+            ((TextView) findViewById(R.id.uberSUVPrice)).setText(formatter.format(mapsActivity.uberSUVPrice));
         }
         else{
-            ((TextView) findViewById(R.id.uberSUVPriceTextView)).setText("N/A");
+            ((TextView) findViewById(R.id.uberSUVPrice)).setText("N/A");
         }
 
 
