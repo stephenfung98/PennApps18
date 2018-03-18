@@ -17,14 +17,14 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         //wait one second to allow the information to come back from AWS
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
-        //change the lyft section's price
+        //change the Lyft section's price
         if (lyftPrice != 0) {
             ((TextView) findViewById(R.id.lyftPrice)).setText(formatter.format(lyftPrice));
         }
@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
         }
 
 
-        //change the uber section's price
+        //change the Uber section's price
 
         if(uberXPrice != 0) {
             ((TextView) findViewById(R.id.uberXPrice)).setText(formatter.format(uberXPrice));
@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
             ((TextView) findViewById(R.id.uberXLPrice)).setText(formatter.format(uberXLPrice));
         }
         else{
-            ((TextView) findViewById(R.id.uberXL)).setText("N/A");
+            ((TextView) findViewById(R.id.uberXLPrice)).setText("N/A");
         }
 
         if(uberSelectPrice != 0) {
