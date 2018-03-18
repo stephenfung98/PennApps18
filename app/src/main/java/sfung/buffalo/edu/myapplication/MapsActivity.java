@@ -63,14 +63,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     static String city;
     DynamoDBMapper dynamoDBMapper;
 
-    static double lyftLinePrice = 0.0;
+//    static double lyftLinePrice = 0.0;
     static double lyftPrice = 0.0;
     static double lyftPlusPrice = 0.0;
     static double lyftPremierPrice = 0.0;
     static double lyftLuxPrice = 0.0;
     static double lyftLuxSUVPrice = 0.0;
 
-    static double uberPoolPrice = 0.0;
+//    static double uberPoolPrice = 0.0;
     static double uberXPrice = 0.0;
     static double uberXLPrice = 0.0;
     static double uberSelectPrice = 0.0;
@@ -122,7 +122,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     }
                                 }
                             }
-                            String str = addresses.get(0).getAddressLine(0);
+                            String str = null;
+                            if (addresses != null) {
+                                str = addresses.get(0).getAddressLine(0);
+                            }
                             pickUp = str;
                             placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
                             placeAutoCompleteFrom.setText(str);
@@ -205,10 +208,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //if either pickup or destination is empty, pop up an error box, else create a new direction finder with pick up and destination
                 if (markerFrom == null) {
                     Toast.makeText(MapsActivity.this ,"Please enter a pickup address!", Toast.LENGTH_SHORT).show();
-                    return;
                 } else if (markerTo == null) {
                     Toast.makeText(MapsActivity.this, "Please enter destination address!", Toast.LENGTH_SHORT).show();
-                    return;
                 }else {
                     try {
                         new DirectionFinder(MapsActivity.this, pickUp, destination).execute();
@@ -361,16 +362,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 200: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // {Some Code}
-                }
-            }
-        }
-    }
+
 
     @Override
     public void onDirectionFinderStart() {
@@ -380,7 +372,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
         for (Route route : routes) {
-            double x = 0.0;
+            double x;
             String dis;
             if(route.distance.text.length() > 7){
                 dis = route.distance.text.substring(0, 1);
