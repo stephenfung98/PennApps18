@@ -113,9 +113,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         latlngFrom = new LatLng(latitude, longitude);
                         Geocoder geocoder = new Geocoder(getApplicationContext());
                         try {
-                            List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
-                            String str = addressList.get(0).getAddressLine(0);
-                             city= addressList.get(0).getLocality();
+                            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 10);
+                            if (addresses != null && addresses.size() > 0) {
+                                for (Address adr : addresses) {
+                                    if (adr.getLocality() != null && adr.getLocality().length() > 0) {
+                                        city = adr.getLocality();
+                                        break;
+                                    }
+                                }
+                            }
+                            String str = addresses.get(0).getAddressLine(0);
                             pickUp = str;
                             placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
                             placeAutoCompleteFrom.setText(str);
@@ -196,23 +203,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 //if either pickup or destination is empty, pop up an error box, else create a new direction finder with pick up and destination
-                    if (markerFrom == null) {
-                        Toast.makeText(MapsActivity.this ,"Please enter a pickup address!", Toast.LENGTH_SHORT).show();
-                        return;
-                    } else if (markerTo == null) {
-                        Toast.makeText(MapsActivity.this, "Please enter destination address!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }else {
-                        try {
-                            new DirectionFinder(MapsActivity.this, pickUp, destination).execute();
+                if (markerFrom == null) {
+                    Toast.makeText(MapsActivity.this ,"Please enter a pickup address!", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (markerTo == null) {
+                    Toast.makeText(MapsActivity.this, "Please enter destination address!", Toast.LENGTH_SHORT).show();
+                    return;
+                }else {
+                    try {
+                        new DirectionFinder(MapsActivity.this, pickUp, destination).execute();
 
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                        Intent priceIntent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(priceIntent);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
                     }
+                    Intent priceIntent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(priceIntent);
                 }
+            }
 
         });
 
@@ -302,13 +309,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Geocoder gcd = new Geocoder(getApplicationContext());
                     List<Address> addresses = null;
                     try {
-                        addresses = gcd.getFromLocation(latlngFrom.latitude, latlngFrom.longitude, 1);
+                        addresses = gcd.getFromLocation(latlngFrom.latitude, latlngFrom.longitude, 10);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    if (addresses != null && addresses.size() > 0) {
-//                         city= addresses.get(0).getLocality();
-                    }
+                        if (addresses != null && addresses.size() > 0) {
+                            for (Address adr : addresses) {
+                                if (adr.getLocality() != null && adr.getLocality().length() > 0) {
+                                    city = adr.getLocality();
+                                    break;
+                                }
+                            }
+                        }
+
 
                 }
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();

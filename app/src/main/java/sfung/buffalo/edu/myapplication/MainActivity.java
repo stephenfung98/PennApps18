@@ -72,6 +72,13 @@ public class MainActivity extends Activity {
             ((TextView) findViewById(R.id.uberXL)).setText("N/A");
         }
 
+        if(mapsActivity.uberSelectPrice != 0) {
+            ((TextView) findViewById(R.id.uberXPrice)).setText(formatter.format(mapsActivity.uberSelectPrice));
+        }
+        else{
+            ((TextView) findViewById(R.id.uberSelectPrice)).setText("N/A");
+        }
+
         if(mapsActivity.uberBlackPrice != 0) {
             ((TextView) findViewById(R.id.uberBlackPrice)).setText(formatter.format(mapsActivity.uberBlackPrice));
         }
