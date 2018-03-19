@@ -15,7 +15,7 @@ This repository contains the source code for the FairRide Android app.
 ## Authors
 
 * **Stephen Fung** - *Backend* - [Stephenfung98](https://github.com/stephenfung98)
-* **Stephen Fung** - *Frontend* - [Jayll](https://github.com/jayll)
+* **Jay Lliguichushca** - *Frontend* - [Jayll](https://github.com/jayll)
 
 See also the list of [contributors](https://github.com/stephenfung98/PennApps18/graphs/contributors) who participated in this project.
 
