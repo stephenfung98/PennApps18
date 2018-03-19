@@ -6,6 +6,8 @@ This andriod application compares Uber and Lyft prices to help users determine w
 
 This repository contains the source code for the FairRide Android app.
 
+![](1.png)
+![](2.png)
 ## Built With
 
 * [Google Maps API](https://developers.google.com/maps/) - The map used
