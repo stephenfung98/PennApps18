@@ -17,11 +17,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 import com.amazonaws.models.nosql.LyftPricesDO;
 import com.amazonaws.models.nosql.UberPricesDO;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
@@ -41,9 +39,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import sfung.buffalo.edu.myapplication.Modules.DirectionFinder;
 import sfung.buffalo.edu.myapplication.Modules.DirectionFinderListener;
@@ -227,7 +223,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ((EditText) placeAutoCompleteFrom.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(12.0f);
         ((EditText) placeAutoCompleteFrom.getView().findViewById(R.id.place_autocomplete_search_input)).setTextColor(Color.WHITE);
         placeAutoCompleteFrom.setHint("Enter your pickup location");
-
         placeAutoCompleteFrom = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.from_autocomplete);
         placeAutoCompleteFrom.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -344,14 +339,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                         }
                     }
-                    //thread to get price when to city is changed
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            lyftPricesDO = dynamoDBMapper.load(LyftPricesDO.class, city);
-//                            uberPricesDO = dynamoDBMapper.load(UberPricesDO.class, city);
-//                        }
-//                    }).start();
+
                     //Gets distance and duration
                     if (markerTo != null && markerFrom != null) {
                         try {
@@ -439,7 +427,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-//                    lyftLinePrice = (dynamoDBMapper.load(LyftPricesDO.class, city).getBaseLine() + dynamoDBMapper.load(LyftPricesDO.class, city).getMinuteLine() * duration + dynamoDBMapper.load(LyftPricesDO.class, city).getMileLine() * distance) * dynamoDBMapper.load(LyftPricesDO.class, city).getTaxAndFees();
                     lyftPrice = (lyftPricesDO.getBaseLyft() + lyftPricesDO.getMinuteLyft() * duration + lyftPricesDO.getMileLyft() * distance) * lyftPricesDO.getTaxAndFees();
                     lyftPlusPrice = (lyftPricesDO.getBasePlus() + lyftPricesDO.getMinutePlus() * duration + lyftPricesDO.getMilePlus() * distance) * lyftPricesDO.getTaxAndFees();
                     lyftPremierPrice = (lyftPricesDO.getBasePremier() + lyftPricesDO.getMinutePremier() * duration + lyftPricesDO.getMilePremier() * distance) * lyftPricesDO.getTaxAndFees();
@@ -452,7 +439,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-//                    uberPoolPrice = (dynamoDBMapper.load(UberPricesDO.class, city).getBasePool() + dynamoDBMapper.load(UberPricesDO.class, city).getMinutePool() * duration + dynamoDBMapper.load(UberPricesDO.class, city).getMilePool() * distance) * dynamoDBMapper.load(UberPricesDO.class, city).getTaxAndFees();
                     uberXPrice = (uberPricesDO.getBaseX() + uberPricesDO.getMinuteX() * duration + uberPricesDO.getMileX() * distance) * uberPricesDO.getTaxAndFees();
                     uberXLPrice = (uberPricesDO.getBaseXL() + uberPricesDO.getMinuteXL() * duration + uberPricesDO.getMileXL() * distance) * uberPricesDO.getTaxAndFees();
                     uberSelectPrice = (uberPricesDO.getBaseSelect() + uberPricesDO.getMinuteSelect() * duration + uberPricesDO.getMileSelect() * distance) * uberPricesDO.getTaxAndFees();
@@ -460,9 +446,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     uberSUVPrice = (uberPricesDO.getBaseSUV() + uberPricesDO.getMinuteSUV() * duration + uberPricesDO.getMileSUV() * distance) * uberPricesDO.getTaxAndFees();
                 }
             }).start();
-            //changes to the price page
-//            Intent priceIntent = new Intent (this, MainActivity.class);
-//            startActivity(priceIntent);
         }
     }
 }
