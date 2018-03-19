@@ -1,5 +1,4 @@
 package sfung.buffalo.edu.myapplication;
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -17,10 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.models.nosql.LyftPricesDO;
@@ -42,10 +37,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
 import sfung.buffalo.edu.myapplication.Modules.DirectionFinder;
 import sfung.buffalo.edu.myapplication.Modules.DirectionFinderListener;
 import sfung.buffalo.edu.myapplication.Modules.Route;
@@ -344,9 +335,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                         }
                     }
-<<<<<<< HEAD
-
-=======
                      //thread to get price when to city is changed
                     new Thread(new Runnable() {
                         @Override
@@ -355,7 +343,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             uberPricesDO = dynamoDBMapper.load(UberPricesDO.class, city);
                         }
                     }).start();
->>>>>>> origin/master
                     //Gets distance and duration
                     if (markerTo != null && markerFrom != null) {
                         try {
