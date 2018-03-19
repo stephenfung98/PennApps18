@@ -2,7 +2,7 @@
 
 # FairRide
 
-This andriod application compaares Uber and Lyft prices to help users determine which one is cheaper. 
+This andriod application compares Uber and Lyft prices to help users determine which one is cheaper. 
 
 This repository contains the source code for the FairRide Android app.
 
