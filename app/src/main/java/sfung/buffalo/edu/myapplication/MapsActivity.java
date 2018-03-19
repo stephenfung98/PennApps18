@@ -335,7 +335,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                         }
                     }
-                     //thread to get price when to city is changed
+                    //thread to get price when to city is changed
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -406,6 +406,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             if (route.duration.text.charAt(2) == 'm') {
                 x = Integer.parseInt(route.duration.text.substring(0, 1));
+            } else if (route.duration.text.charAt(3) == 'h') {
+                x = Integer.parseInt(route.duration.text.substring(0, 1));
+                dis += route.distance.text.substring(2, route.distance.text.length() - 3);
             } else if (route.duration.text.charAt(3) == 'm') {
                 x = Integer.parseInt(route.duration.text.substring(0, route.duration.text.length() - 5));
             } else if (route.duration.text.charAt(2) == 'd') {
@@ -414,7 +417,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } else {
                 x = Integer.parseInt(route.duration.text.substring(8, 9));
                 x += Integer.parseInt(route.duration.text.substring(0, 1)) * 60;
-
             }
             distance = Double.parseDouble(dis);
             duration = x;
@@ -423,11 +425,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    lyftPrice = (lyftPricesDO.getBaseLyft() + lyftPricesDO.getMinuteLyft() * duration + lyftPricesDO.getMileLyft() * distance) * lyftPricesDO.getTaxAndFees();
-                    lyftPlusPrice = (lyftPricesDO.getBasePlus() + lyftPricesDO.getMinutePlus() * duration + lyftPricesDO.getMilePlus() * distance) * lyftPricesDO.getTaxAndFees();
-                    lyftPremierPrice = (lyftPricesDO.getBasePremier() + lyftPricesDO.getMinutePremier() * duration + lyftPricesDO.getMilePremier() * distance) * lyftPricesDO.getTaxAndFees();
-                    lyftLuxPrice = (lyftPricesDO.getBaseLux() + lyftPricesDO.getMinuteLux() * duration + lyftPricesDO.getMileLux() * distance) * lyftPricesDO.getTaxAndFees();
-                    lyftLuxSUVPrice = (lyftPricesDO.getBaseLuxSUV() + lyftPricesDO.getMinuteLuxSUV() * duration + lyftPricesDO.getMileLuxSUV() * distance) * lyftPricesDO.getTaxAndFees();
+                    try {
+//                    lyftLinePrice = (dynamoDBMapper.load(LyftPricesDO.class, city).getBaseLine() + dynamoDBMapper.load(LyftPricesDO.class, city).getMinuteLine() * duration + dynamoDBMapper.load(LyftPricesDO.class, city).getMileLine() * distance) * dynamoDBMapper.load(LyftPricesDO.class, city).getTaxAndFees();
+                        lyftPrice = (lyftPricesDO.getBaseLyft() + lyftPricesDO.getMinuteLyft() * duration + lyftPricesDO.getMileLyft() * distance) * lyftPricesDO.getTaxAndFees();
+                        lyftPlusPrice = (lyftPricesDO.getBasePlus() + lyftPricesDO.getMinutePlus() * duration + lyftPricesDO.getMilePlus() * distance) * lyftPricesDO.getTaxAndFees();
+                        lyftPremierPrice = (lyftPricesDO.getBasePremier() + lyftPricesDO.getMinutePremier() * duration + lyftPricesDO.getMilePremier() * distance) * lyftPricesDO.getTaxAndFees();
+                        lyftLuxPrice = (lyftPricesDO.getBaseLux() + lyftPricesDO.getMinuteLux() * duration + lyftPricesDO.getMileLux() * distance) * lyftPricesDO.getTaxAndFees();
+                        lyftLuxSUVPrice = (lyftPricesDO.getBaseLuxSUV() + lyftPricesDO.getMinuteLuxSUV() * duration + lyftPricesDO.getMileLuxSUV() * distance) * lyftPricesDO.getTaxAndFees();
+                    } catch (NullPointerException e) {
+                        lyftPrice = 0;
+                        lyftPlusPrice = 0;
+                        lyftPremierPrice = 0;
+                        lyftLuxPrice = 0;
+                        lyftLuxSUVPrice = 0;
+                    }
                 }
             }).start();
 
@@ -435,13 +446,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    uberXPrice = (uberPricesDO.getBaseX() + uberPricesDO.getMinuteX() * duration + uberPricesDO.getMileX() * distance) * uberPricesDO.getTaxAndFees();
-                    uberXLPrice = (uberPricesDO.getBaseXL() + uberPricesDO.getMinuteXL() * duration + uberPricesDO.getMileXL() * distance) * uberPricesDO.getTaxAndFees();
-                    uberSelectPrice = (uberPricesDO.getBaseSelect() + uberPricesDO.getMinuteSelect() * duration + uberPricesDO.getMileSelect() * distance) * uberPricesDO.getTaxAndFees();
-                    uberBlackPrice = (uberPricesDO.getBaseBlack() + uberPricesDO.getMinuteBlack() * duration + uberPricesDO.getMileBlack() * distance) * uberPricesDO.getTaxAndFees();
-                    uberSUVPrice = (uberPricesDO.getBaseSUV() + uberPricesDO.getMinuteSUV() * duration + uberPricesDO.getMileSUV() * distance) * uberPricesDO.getTaxAndFees();
+                    try {
+//                    uberPoolPrice = (dynamoDBMapper.load(UberPricesDO.class, city).getBasePool() + dynamoDBMapper.load(UberPricesDO.class, city).getMinutePool() * duration + dynamoDBMapper.load(UberPricesDO.class, city).getMilePool() * distance) * dynamoDBMapper.load(UberPricesDO.class, city).getTaxAndFees();
+                        uberXPrice = (uberPricesDO.getBaseX() + uberPricesDO.getMinuteX() * duration + uberPricesDO.getMileX() * distance) * uberPricesDO.getTaxAndFees();
+                        uberXLPrice = (uberPricesDO.getBaseXL() + uberPricesDO.getMinuteXL() * duration + uberPricesDO.getMileXL() * distance) * uberPricesDO.getTaxAndFees();
+                        uberSelectPrice = (uberPricesDO.getBaseSelect() + uberPricesDO.getMinuteSelect() * duration + uberPricesDO.getMileSelect() * distance) * uberPricesDO.getTaxAndFees();
+                        uberBlackPrice = (uberPricesDO.getBaseBlack() + uberPricesDO.getMinuteBlack() * duration + uberPricesDO.getMileBlack() * distance) * uberPricesDO.getTaxAndFees();
+                        uberSUVPrice = (uberPricesDO.getBaseSUV() + uberPricesDO.getMinuteSUV() * duration + uberPricesDO.getMileSUV() * distance) * uberPricesDO.getTaxAndFees();
+                    } catch (NullPointerException e) {
+                        uberXPrice = 0;
+                        uberXLPrice = 0;
+                        uberSelectPrice = 0;
+                        uberBlackPrice = 0;
+                        uberSUVPrice = 0;
+                    }
                 }
             }).start();
         }
     }
 }
+
