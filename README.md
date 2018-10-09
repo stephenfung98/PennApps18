@@ -1,10 +1,10 @@
 # This project is still in development, download links and more information will be updated soon.
 
-# FairRide
+# FareRide
 
 This andriod application compares Uber and Lyft prices to help users determine which one is cheaper. 
 
-This repository contains the source code for the FairRide Android app.
+This repository contains the source code for the FareRide Android app.
 
 <img src="1.png" width="300"> <img src="2.png" width="300">
 ## Built With
