@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -7,366 +8,497 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <View
-        android:id="@+id/vertical_divider"
-        android:layout_width="10dp"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true" />
 
-
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/lyftLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_toLeftOf="@id/vertical_divider"
+        android:layout_width="180dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_toStartOf="@id/uberLayout"
         android:background="@color/Lyft"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/uberLayout"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/lyftImageView"
-            android:layout_marginTop="10dp"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/lyft" />
-    </LinearLayout>
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/lyft"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/uberLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toRightOf="@id/vertical_divider"
+        android:layout_width="180dp"
+        android:layout_height="0dp"
+        android:layout_toEndOf="@id/lyftLayout"
         android:background="@color/Uber"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <ImageView
             android:id="@+id/uberImage"
-            android:layout_marginTop="8dp"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="TODO"
             android:padding="16dp"
-            android:src="@drawable/uberpic" />
-    </LinearLayout>
+            android:src="@drawable/uberpic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
 
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/first"
-        android:background="@drawable/circularoutline"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="120dp"
-        android:layout_width="350dp"
-        android:layout_height="65dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="145dp"
+        android:background="@color/white"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/lyft"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
             android:layout_weight=".31"
-            android:text="Lyft"
             android:fontFamily="@font/montserrat"
+            android:text="Lyft"
             android:textAlignment="viewStart"
             android:textColor="@color/Lyft"
-            android:textSize="25dp" />
+            android:textSize="23sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/lyftPrice"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="50dp"
             android:layout_weight=".19"
             android:fontFamily="@font/montserrat"
             android:text="N/A"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="15dp"
-            android:textStyle="bold" />
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/uberXPrice"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="8dp"
             android:layout_weight=".19"
             android:fontFamily="@font/montserrat"
             android:text="N/A"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="15dp"
-            android:textStyle="bold" />
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/uberX"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="7dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:layout_weight=".31"
-            android:text="UberX"
             android:fontFamily="@font/montserrat"
+            android:text="UberX"
             android:textAlignment="textEnd"
             android:textColor="@color/Uber"
-            android:textSize="25dp" />
-</LinearLayout>
+            android:textSize="23sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/second"
-        android:background="@drawable/circularoutline"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="180dp"
-        android:layout_width="350dp"
-        android:layout_height="65dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="40dp"
+        android:background="@color/white"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/first">
 
         <TextView
             android:id="@+id/lyftPlus"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
             android:layout_weight=".31"
-            android:text="Plus"
             android:fontFamily="@font/montserrat"
+            android:text="Plus"
             android:textAlignment="viewStart"
             android:textColor="@color/Lyft"
-            android:textSize="25dp" />
+            android:textSize="23sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/lyftPlusPrice"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="8dp"
             android:layout_weight=".19"
             android:fontFamily="@font/montserrat"
             android:text="N/A"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="15dp"
-            android:textStyle="bold" />
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/uberXLPrice"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="50dp"
             android:layout_weight=".19"
             android:fontFamily="@font/montserrat"
             android:text="N/A"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="15dp"
-            android:textStyle="bold" />
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/uberXL"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:layout_weight=".31"
-            android:text="UberXL"
             android:fontFamily="@font/montserrat"
+            android:text="UberXL"
             android:textAlignment="textEnd"
             android:textColor="@color/Uber"
-            android:textSize="25dp" />
-    </LinearLayout>
+            android:textSize="23sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/third"
-        android:background="@drawable/circularoutline"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="240dp"
-        android:layout_width="350dp"
-        android:layout_height="65dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="40dp"
+        android:background="@color/white"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/second">
 
         <TextView
             android:id="@+id/lyftPremier"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
             android:layout_weight=".31"
-            android:text="Premier"
             android:fontFamily="@font/montserrat"
+            android:text="Premier"
             android:textAlignment="viewStart"
             android:textColor="@color/Lyft"
-            android:textSize="25dp" />
+            android:textSize="23dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/lyftPremierPrice"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="50dp"
             android:layout_weight=".19"
             android:fontFamily="@font/montserrat"
             android:text="N/A"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="15dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/uberSelectPrice"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="8dp"
             android:layout_weight=".19"
             android:fontFamily="@font/montserrat"
             android:text="N/A"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="15dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/uberSelect"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="7dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:layout_weight=".31"
-            android:text="SELECT"
             android:fontFamily="@font/montserrat"
+            android:text="SELECT"
             android:textAlignment="textEnd"
             android:textColor="@color/Uber"
-            android:textSize="25dp" />
-    </LinearLayout>
+            android:textSize="23dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
-
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/fourth"
-        android:background="@drawable/circularoutline"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="300dp"
-        android:layout_width="350dp"
-        android:layout_height="65dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="40dp"
+        android:background="@color/white"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/third">
 
         <TextView
             android:id="@+id/lyftLux"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
             android:layout_weight=".31"
-            android:text="Lux"
             android:fontFamily="@font/montserrat"
+            android:text="Lux"
             android:textAlignment="viewStart"
             android:textColor="@color/Lyft"
-            android:textSize="25dp" />
+            android:textSize="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/lyftLuxPrice"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="50dp"
             android:layout_weight=".19"
             android:fontFamily="@font/montserrat"
             android:text="N/A"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="15dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/uberBlackPrice"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="8dp"
             android:layout_weight=".19"
             android:fontFamily="@font/montserrat"
             android:text="N/A"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="15dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/uberBlack"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="7dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:layout_weight=".31"
-            android:text="BLACK"
             android:fontFamily="@font/montserrat"
+            android:text="BLACK"
             android:textAlignment="textEnd"
             android:textColor="@color/Uber"
-            android:textSize="25dp" />
-    </LinearLayout>
+            android:textSize="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
 
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/fifth"
-        android:background="@drawable/circularoutline"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="360dp"
-        android:layout_width="350dp"
-        android:layout_height="65dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="40dp"
+        android:background="@color/white"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fourth">
 
         <TextView
             android:id="@+id/lyftLuxSUV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
             android:layout_weight=".31"
-            android:text="Lux SUV"
             android:fontFamily="@font/montserrat"
+            android:text="Lux SUV"
             android:textAlignment="viewStart"
             android:textColor="@color/Lyft"
-            android:textSize="25dp" />
+            android:textSize="23dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/lyftLuxSUVPrice"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="50dp"
             android:layout_weight=".19"
             android:fontFamily="@font/montserrat"
             android:text="N/A"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="15dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/uberSUVPrice"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="8dp"
             android:layout_weight=".19"
             android:fontFamily="@font/montserrat"
             android:text="N/A"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="15dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/uberSUV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="7dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:layout_weight=".31"
-            android:text="SUV"
             android:fontFamily="@font/montserrat"
+            android:text="SUV"
             android:textAlignment="textEnd"
             android:textColor="@color/Uber"
-            android:textSize="25dp" />
-    </LinearLayout>
+            android:textSize="23dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>
